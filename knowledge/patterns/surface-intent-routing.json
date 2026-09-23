@@ -1,0 +1,23 @@
+{
+  "id": "surface-intent-routing",
+  "title": "Choose a surface by user intent",
+  "summary": "Decide whether a page must persuade, support repeated work, teach or showcase before choosing layout density, navigation and visual emphasis.",
+  "subjects": ["site-inspiration", "agent-guidance"],
+  "frameworks": ["agnostic"],
+  "keywords": ["landing page", "dashboard", "documentation", "portfolio", "页面定位", "信息密度"],
+  "when_to_use": ["The brief names a product but leaves the purpose of an individual page or surface unclear."],
+  "avoid_when": ["The user has already pinned a specific existing workflow and visual identity; preserve those constraints."],
+  "anatomy": [
+    {"part": "primary user task", "purpose": "States what the visitor must decide, complete, understand or inspect."},
+    {"part": "success signal", "purpose": "Defines an observable outcome for that task."},
+    {"part": "information hierarchy", "purpose": "Places the most useful content and action first."},
+    {"part": "navigation model", "purpose": "Matches repeated use or linear reading rather than following a generic landing-page template."}
+  ],
+  "props_schema": {"type": "object", "properties": {"surfaceGoal": {"enum": ["decide", "operate", "learn", "inspect"]}, "primaryAction": {"type": "string"}}, "required": ["surfaceGoal"], "additionalProperties": false},
+  "tokens": [],
+  "states": [],
+  "responsive": ["Re-evaluate the task order on mobile instead of merely stacking desktop sections."],
+  "accessibility": ["Keep the primary task visible through semantic headings, landmarks and clear action labels."],
+  "implementation_steps": ["Identify the visitor's task and success signal.", "Choose information density and interaction model to fit that task.", "Create a structure sketch before visual styling."],
+  "source_refs": [{"item_id": "003", "evidence_paths": ["plugin/skills/impeccable/SKILL.md"], "license_scope": "Apache-2.0 skill documentation; NOTICE applies", "credit": "Impeccable project contributors"}]
+}

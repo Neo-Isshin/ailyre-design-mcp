@@ -1,0 +1,30 @@
+{
+  "id": "dashboard-app-shell",
+  "title": "Operational dashboard app shell",
+  "summary": "Compose persistent navigation, page header, main content and optional contextual panel so a dense application remains predictable across repeated tasks.",
+  "subjects": ["dashboard", "components"],
+  "frameworks": ["react", "nextjs", "agnostic"],
+  "keywords": ["dashboard", "admin", "app shell", "side navigation", "后台", "管理台"],
+  "when_to_use": ["Users return repeatedly to scan data and complete related operational workflows."],
+  "avoid_when": ["A one-page campaign or article needs focused reading rather than persistent application chrome."],
+  "anatomy": [
+    {"part": "global navigation", "purpose": "Keeps core destinations stable and indicates location.", "semantic_hint": "nav"},
+    {"part": "page header", "purpose": "Names the current task and holds page-scoped actions."},
+    {"part": "main region", "purpose": "Holds the data, forms or tools needed for the current task.", "semantic_hint": "main"},
+    {"part": "context panel", "purpose": "Shows optional detail or filters without replacing the main task."}
+  ],
+  "props_schema": {"type": "object", "properties": {"navigation": {"type": "array", "items": {"type": "object", "properties": {"label": {"type": "string"}, "href": {"type": "string"}}, "required": ["label", "href"]}}, "title": {"type": "string"}, "contextPanelVisible": {"type": "boolean"}}, "required": ["navigation", "title"], "additionalProperties": false},
+  "tokens": [
+    {"name": "--color-background-surface", "purpose": "Distinct but restrained surface level for working regions."},
+    {"name": "--color-text-primary", "purpose": "High-contrast operational text."},
+    {"name": "--radius-container", "purpose": "Consistent edge treatment for major tools."}
+  ],
+  "states": [
+    {"name": "navigation-collapsed", "behavior": "Keep destination names discoverable and preserve focus order."},
+    {"name": "context-open", "behavior": "Panel exposes detail without obscuring the primary workflow."}
+  ],
+  "responsive": ["Convert persistent side navigation to a predictable compact control on narrow screens; keep page actions attached to the page header."],
+  "accessibility": ["Use landmarks and an explicit page heading.", "Keep navigation and context controls keyboard reachable with visible focus."],
+  "implementation_steps": ["Identify repeated destinations and the page's primary task.", "Build the shell with stable slots before choosing visual styling.", "Apply the project's tokens and verify dense content at narrow and wide sizes."],
+  "source_refs": [{"item_id": "061", "evidence_paths": ["packages/core/README.md"], "license_scope": "MIT repository documentation; pattern is rewritten", "credit": "Astryx design system by Meta"}]
+}

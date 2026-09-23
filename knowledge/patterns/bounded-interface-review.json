@@ -1,0 +1,27 @@
+{
+  "id": "bounded-interface-review",
+  "title": "Bounded interface review",
+  "summary": "Review a working interface in a small number of complete passes, grouping related visual, usability and responsive defects before editing.",
+  "subjects": ["agent-guidance", "design-system"],
+  "frameworks": ["agnostic"],
+  "keywords": ["UI audit", "polish", "quality review", "responsive", "界面审查", "视觉验收"],
+  "when_to_use": ["An existing page works but its visual hierarchy, state handling or responsive behavior needs a focused quality pass."],
+  "avoid_when": ["There is no running page or verifiable visual artifact yet; first establish product truth and a working surface."],
+  "anatomy": [
+    {"part": "evidence", "purpose": "Captures current desktop and mobile states, including errors and empty states."},
+    {"part": "defect list", "purpose": "Groups issues by severity and shared cause."},
+    {"part": "change batch", "purpose": "Applies related corrections together rather than endless small edits."},
+    {"part": "confirmation", "purpose": "Checks the changed surfaces once more against the original defects."}
+  ],
+  "props_schema": {"type": "object", "properties": {"target": {"type": "string"}, "deviceClasses": {"type": "array", "items": {"type": "string"}}}, "required": ["target"], "additionalProperties": false},
+  "tokens": [],
+  "states": [
+    {"name": "capture", "behavior": "Gather bounded evidence from representative viewports and interaction states."},
+    {"name": "repair", "behavior": "Fix causes in one coherent batch."},
+    {"name": "confirm", "behavior": "Verify the repaired states and stop when the acceptance criteria are met."}
+  ],
+  "responsive": ["Include at least one narrow and one wide viewport when the product is web-based."],
+  "accessibility": ["Include focus, disabled, error and reduced-motion behavior in the same review pass."],
+  "implementation_steps": ["State the target and acceptance criteria.", "Capture representative UI states before editing.", "Prioritize root causes, implement a bounded repair batch and verify once."],
+  "source_refs": [{"item_id": "003", "evidence_paths": ["plugin/skills/impeccable/SKILL.md"], "license_scope": "Apache-2.0 skill documentation; NOTICE applies", "credit": "Impeccable project contributors"}]
+}

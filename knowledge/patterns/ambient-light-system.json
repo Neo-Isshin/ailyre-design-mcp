@@ -1,0 +1,44 @@
+{
+  "id": "ambient-light-system",
+  "title": "Coherent ambient lighting tokens",
+  "summary": "Define one light direction and intensity model so raised, inset and flat surfaces share consistent highlights and shadows across a tactile interface.",
+  "subjects": ["design-system", "visual-effects"],
+  "frameworks": ["agnostic"],
+  "keywords": ["physical lighting", "tactile", "skeuomorphic", "光照", "拟物", "surface"],
+  "when_to_use": ["A hardware-like control panel needs depth without independently hand-tuning every component."],
+  "avoid_when": ["The product needs flat, high-density operational UI where decorative depth would obscure hierarchy."],
+  "anatomy": [
+    {"part": "lighting context", "purpose": "Owns shared direction, hue and key/fill intensity values."},
+    {"part": "surface", "purpose": "Maps material color and elevation to a predictable light response."},
+    {"part": "edge treatment", "purpose": "Uses a consistent chamfer or inset rule across controls."},
+    {"part": "interaction layer", "purpose": "Changes elevation or shading on hover, press and disabled states without moving the light source."}
+  ],
+  "props_schema": {
+    "type": "object",
+    "properties": {
+      "lightX": {"type": "number", "minimum": -1, "maximum": 1},
+      "lightY": {"type": "number", "minimum": -1, "maximum": 1},
+      "keyIntensity": {"type": "number", "minimum": 0, "maximum": 1},
+      "fillIntensity": {"type": "number", "minimum": 0, "maximum": 1},
+      "elevation": {"type": "number"}
+    },
+    "additionalProperties": false
+  },
+  "tokens": [
+    {"name": "--amb-light-x", "purpose": "Horizontal light direction."},
+    {"name": "--amb-light-y", "purpose": "Vertical light direction."},
+    {"name": "--amb-key-light-intensity", "purpose": "Strength of primary highlights and shadows."},
+    {"name": "--amb-fill-light-intensity", "purpose": "Softens contrast without changing direction."},
+    {"name": "--amb-albedo", "purpose": "Surface base color."},
+    {"name": "--amb-elevation", "purpose": "Depth used by surface and edge rules."}
+  ],
+  "states": [
+    {"name": "rest", "behavior": "Keep material and lighting stable."},
+    {"name": "pressed", "behavior": "Reduce apparent elevation and strengthen inset cues."},
+    {"name": "disabled", "behavior": "Lower contrast while preserving readable labels."}
+  ],
+  "responsive": ["Use the same light direction at every breakpoint; scale depth and shadow spread to the component size."],
+  "accessibility": ["Never rely on shading alone to convey a control state.", "Check text contrast on the lightest and darkest generated surfaces."],
+  "implementation_steps": ["Define the shared lighting tokens in the user's existing theme layer.", "Map surface roles and elevation levels to those tokens.", "Implement controls using the project's own components and verify state contrast."],
+  "source_refs": [{"item_id": "001", "evidence_paths": ["packages/ambient-css/README.md", "packages/ambient-css/src/ambient.css"], "license_scope": "MIT package source", "credit": "Ambient CSS by Ramakrishnan Veeraragavan"}]
+}

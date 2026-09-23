@@ -1,0 +1,41 @@
+{
+  "id": "tactile-control-elevation",
+  "title": "Tactile control elevation",
+  "summary": "Give knobs, switches and buttons a consistent depth hierarchy by separating a control's face, edge, recess and pressed feedback.",
+  "subjects": ["components", "visual-effects"],
+  "frameworks": ["agnostic"],
+  "keywords": ["tactile controls", "knob", "switch", "button", "elevation", "拟物控件"],
+  "when_to_use": ["The interface represents a physical instrument or benefits from explicit press depth."],
+  "avoid_when": ["The control is tiny, data-dense or primarily navigational."],
+  "anatomy": [
+    {"part": "control root", "purpose": "Defines hit area and semantic role.", "semantic_hint": "button or native input"},
+    {"part": "face", "purpose": "Holds label or indicator and the base material."},
+    {"part": "edge", "purpose": "Communicates the control's elevation relative to its panel."},
+    {"part": "recess", "purpose": "Shows where the control meets the surrounding surface."}
+  ],
+  "props_schema": {
+    "type": "object",
+    "properties": {
+      "elevation": {"enum": ["flat", "raised", "inset"]},
+      "pressed": {"type": "boolean"},
+      "disabled": {"type": "boolean"},
+      "label": {"type": "string"}
+    },
+    "required": ["label"],
+    "additionalProperties": false
+  },
+  "tokens": [
+    {"name": "--amb-elevation", "purpose": "Relative depth of the face."},
+    {"name": "--amb-chamfer", "purpose": "Amount of edge break around the face."},
+    {"name": "--amb-fillet", "purpose": "Curvature of the transition to the panel."}
+  ],
+  "states": [
+    {"name": "idle", "behavior": "Raised face and edge share the scene's light direction."},
+    {"name": "active", "behavior": "Face appears to move inward; pressed state remains distinguishable without animation."},
+    {"name": "focus", "behavior": "Independent focus outline remains visible above material effects."}
+  ],
+  "responsive": ["Keep the interactive hit target usable on touch screens even if the visual control is compact."],
+  "accessibility": ["Use a native control where possible.", "Expose pressed state with aria-pressed only for toggle buttons; do not use it for momentary actions."],
+  "implementation_steps": ["Choose a small elevation scale shared by all tactile controls.", "Create semantic structure before adding highlights and shadows.", "Test pointer, keyboard and touch feedback with motion reduced."],
+  "source_refs": [{"item_id": "001", "evidence_paths": ["packages/ambient-css/src/ambient.css", "packages/ambient-css/README.md"], "license_scope": "MIT package source", "credit": "Ambient CSS by Ramakrishnan Veeraragavan"}]
+}

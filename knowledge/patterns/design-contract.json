@@ -1,0 +1,28 @@
+{
+  "id": "design-contract",
+  "title": "Portable design-system contract",
+  "summary": "Keep machine-readable tokens and human-readable design rationale together so agents can apply a brand consistently across sessions and stacks.",
+  "subjects": ["design-system", "agent-guidance"],
+  "frameworks": ["agnostic"],
+  "keywords": ["design.md", "tokens", "brand rules", "visual identity", "设计规范", "设计令牌"],
+  "when_to_use": ["Several pages or agents must preserve one product identity over time."],
+  "avoid_when": ["The user asked for a one-off sketch with no established brand decisions."],
+  "anatomy": [
+    {"part": "identity summary", "purpose": "Names the audience, tone and non-negotiable visual decisions."},
+    {"part": "token groups", "purpose": "Defines colors, typography, spacing, radius and component defaults in parseable form."},
+    {"part": "rationale", "purpose": "Explains why each decision exists and where exceptions are allowed."},
+    {"part": "usage rules", "purpose": "Records good and bad examples without copying third-party imagery."}
+  ],
+  "props_schema": {"type": "object", "properties": {}, "additionalProperties": true},
+  "tokens": [
+    {"name": "colors.primary", "purpose": "Primary semantic color, referenced by components."},
+    {"name": "typography.body", "purpose": "Body type role with family, size, line height and weight."},
+    {"name": "spacing.md", "purpose": "Reusable spacing step."},
+    {"name": "rounded.md", "purpose": "Reusable shape radius."}
+  ],
+  "states": [],
+  "responsive": ["Specify typography and spacing behavior at key container sizes, not only one desktop screenshot."],
+  "accessibility": ["Validate the contrast of token combinations used for text and controls.", "Specify accessible alternatives when brand colors fail contrast."],
+  "implementation_steps": ["Interview the user about existing visual identity and product constraints.", "Record canonical tokens separately from descriptive prose.", "Translate token roles into the project's CSS variables, theme object or native equivalents.", "Review one implemented page against the contract and update the contract when decisions change."],
+  "source_refs": [{"item_id": "002", "evidence_paths": ["docs/spec.md"], "license_scope": "Apache-2.0 project documentation", "credit": "Google Labs Code DESIGN.md project"}]
+}

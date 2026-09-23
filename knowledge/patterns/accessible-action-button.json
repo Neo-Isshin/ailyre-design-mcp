@@ -1,0 +1,31 @@
+{
+  "id": "accessible-action-button",
+  "title": "Accessible action button contract",
+  "summary": "Keep action variants, sizes, loading and disabled semantics in one button contract while allowing each project to implement its own visual language.",
+  "subjects": ["components", "dashboard"],
+  "frameworks": ["react", "nextjs"],
+  "keywords": ["button", "loading", "variant", "focus", "操作按钮", "无障碍"],
+  "when_to_use": ["A product has repeated actions needing consistent emphasis, loading feedback and touch targets."],
+  "avoid_when": ["The element navigates to another page; use a link with link semantics instead."],
+  "anatomy": [
+    {"part": "native action element", "purpose": "Provides keyboard and activation semantics.", "semantic_hint": "button"},
+    {"part": "content slot", "purpose": "Holds short text or an icon with an accessible name."},
+    {"part": "status indicator", "purpose": "Shows pending work without changing the button width."},
+    {"part": "focus treatment", "purpose": "Remains visible across all visual variants."}
+  ],
+  "props_schema": {"type": "object", "properties": {"variant": {"enum": ["primary", "secondary", "outline", "ghost", "destructive"]}, "size": {"enum": ["compact", "default", "large", "icon"]}, "loading": {"type": "boolean"}, "disabled": {"type": "boolean"}, "label": {"type": "string"}}, "required": ["label"], "additionalProperties": false},
+  "tokens": [
+    {"name": "--action-bg", "purpose": "Background for the current semantic variant."},
+    {"name": "--action-fg", "purpose": "Foreground with verified contrast."},
+    {"name": "--focus-ring", "purpose": "Focus indication independent of hover color."}
+  ],
+  "states": [
+    {"name": "idle", "behavior": "Action is available and clearly labeled."},
+    {"name": "loading", "behavior": "Prevent duplicate activation and announce progress without erasing the label."},
+    {"name": "disabled", "behavior": "Remove activation while keeping the reason discoverable when relevant."}
+  ],
+  "responsive": ["Preserve a comfortable touch target even when a compact visual size is requested."],
+  "accessibility": ["Use an accessible name for icon-only buttons.", "Do not use color alone to distinguish destructive actions.", "Keep focus visible and respect reduced motion."],
+  "implementation_steps": ["Define semantic variants and sizes from the project's existing tokens.", "Implement loading and disabled as explicit states.", "Test keyboard, touch and assistive-technology behavior."],
+  "source_refs": [{"item_id": "063", "evidence_paths": ["apps/ui/registry/default/ui/button.tsx", "LICENSING.md"], "license_scope": "MIT applies to apps/ui subtree; repository root is AGPL-3.0", "credit": "coss ui / Origin UI contributors"}]
+}

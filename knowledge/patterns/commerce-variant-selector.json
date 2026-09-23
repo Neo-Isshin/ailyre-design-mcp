@@ -1,0 +1,31 @@
+{
+  "id": "commerce-variant-selector",
+  "title": "Product variant and purchase contract",
+  "summary": "Keep product options, stock, quantity, price and purchase actions synchronized so a buyer understands exactly which variant will be added to a cart.",
+  "subjects": ["commerce", "components"],
+  "frameworks": ["react", "nextjs"],
+  "keywords": ["product page", "variant", "stock", "cart", "price", "商品规格", "购物车"],
+  "when_to_use": ["A product has purchasable variants with different images, prices or availability."],
+  "avoid_when": ["The product has no variant choice; a single clear purchase action is simpler."],
+  "anatomy": [
+    {"part": "product context", "purpose": "Names the item and presents a representative image supplied by the product owner."},
+    {"part": "variant selector", "purpose": "Shows options with availability and a clear selected state."},
+    {"part": "price and quantity", "purpose": "Recomputes the charged amount for the selected option."},
+    {"part": "purchase actions", "purpose": "Submits the chosen variant and quantity and displays pending/error feedback."}
+  ],
+  "props_schema": {"type": "object", "properties": {"variants": {"type": "array", "minItems": 1, "items": {"type": "object", "properties": {"id": {"type": "string"}, "label": {"type": "string"}, "price": {"type": "number", "minimum": 0}, "inStock": {"type": "boolean"}, "imageUrl": {"type": "string"}}, "required": ["id", "label", "price", "inStock"]}}, "selectedVariantId": {"type": "string"}, "quantity": {"type": "integer", "minimum": 1}, "loading": {"type": "boolean"}, "errorMessage": {"type": ["string", "null"]}}, "required": ["variants"], "additionalProperties": false},
+  "tokens": [
+    {"name": "--commerce-price-emphasis", "purpose": "Makes the currently payable price easy to scan."},
+    {"name": "--commerce-selection-ring", "purpose": "Indicates the chosen variant independently of color."}
+  ],
+  "states": [
+    {"name": "selected", "behavior": "Price, image and stock reflect one variant ID."},
+    {"name": "out-of-stock", "behavior": "Unavailable choice cannot be purchased but remains understandable."},
+    {"name": "submitting", "behavior": "Prevent duplicate cart actions and keep the selected option stable."},
+    {"name": "error", "behavior": "Present a recoverable message near the purchase action."}
+  ],
+  "responsive": ["On narrow screens keep the selected variant, price and primary purchase action close enough to review together."],
+  "accessibility": ["Variant choices need labels and a programmatic selected state.", "Announce price and stock changes without excessive live-region noise."],
+  "implementation_steps": ["Model variant ID and quantity as explicit state.", "Derive price and availability from the selected variant, then build the responsive structure.", "Emit the selected ID and quantity to the project's cart service; do not invent checkout logic."],
+  "source_refs": [{"item_id": "071", "evidence_paths": ["public/r/product-variant-01-block.json", "content/docs/blocks/product-variants.mdx"], "license_scope": "MIT repository source; media placeholders are excluded", "credit": "Stackzero Commerce UI by Stackzero Labs"}]
+}

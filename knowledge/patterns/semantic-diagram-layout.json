@@ -1,0 +1,26 @@
+{
+  "id": "semantic-diagram-layout",
+  "title": "Semantic diagram before visual layout",
+  "summary": "Model the relationships and message of a diagram first, then choose a visual grammar that reveals those relationships with minimal decoration.",
+  "subjects": ["documentation", "editorial"],
+  "frameworks": ["agnostic"],
+  "keywords": ["architecture diagram", "flowchart", "process", "data flow", "架构图", "流程图"],
+  "when_to_use": ["A technical concept is easier to understand through entities and connections than through prose alone."],
+  "avoid_when": ["A small table or a sentence conveys the same comparison more clearly."],
+  "anatomy": [
+    {"part": "entities", "purpose": "Names the few actors, components or states the reader must distinguish."},
+    {"part": "relationships", "purpose": "Represents direction, dependency, sequence or containment explicitly."},
+    {"part": "focal path", "purpose": "Highlights the main explanation while secondary detail recedes."},
+    {"part": "legend", "purpose": "Explains visual encodings that are not self-evident."}
+  ],
+  "props_schema": {"type": "object", "properties": {"nodes": {"type": "array", "items": {"type": "object", "properties": {"id": {"type": "string"}, "label": {"type": "string"}}, "required": ["id", "label"]}}, "edges": {"type": "array", "items": {"type": "object", "properties": {"from": {"type": "string"}, "to": {"type": "string"}}, "required": ["from", "to"]}}}, "required": ["nodes"], "additionalProperties": false},
+  "tokens": [
+    {"name": "--diagram-ink", "purpose": "Primary line and label color."},
+    {"name": "--diagram-accent", "purpose": "One focal semantic role, not a generic decoration."}
+  ],
+  "states": [],
+  "responsive": ["Split a large diagram into overview and detail when labels would be unreadable on a narrow screen."],
+  "accessibility": ["Provide a text summary of the diagram's meaning and preserve readable contrast and labels."],
+  "implementation_steps": ["Write the explanation as nodes and relations.", "Select one diagram type matching the dominant relation.", "Lay out the minimal readable set of nodes and provide a text equivalent."],
+  "source_refs": [{"item_id": "004", "evidence_paths": ["skills/diagram-design/SKILL.md"], "license_scope": "MIT skill documentation", "credit": "Diagram Design by Cathryn Lavery"}]
+}

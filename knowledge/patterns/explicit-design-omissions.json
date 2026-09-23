@@ -1,0 +1,31 @@
+{
+  "id": "explicit-design-omissions",
+  "title": "Explicit design-system omissions",
+  "summary": "Mark undefined token groups intentionally, with a reason, so agents do not invent a brand palette, radius scale or component language that was never specified.",
+  "subjects": ["design-system", "agent-guidance"],
+  "frameworks": ["agnostic"],
+  "keywords": ["missing tokens", "omitted sections", "brand uncertainty", "fallback", "规范缺失", "不要猜测"],
+  "when_to_use": ["A design system is partial or a new project has only a few confirmed visual rules."],
+  "avoid_when": ["The omitted choice is necessary to satisfy an immediate accessibility or functional requirement; ask or use a clearly labeled temporary default."],
+  "anatomy": [
+    {"part": "defined groups", "purpose": "Carries verified tokens and decisions."},
+    {"part": "omission registry", "purpose": "Lists absent groups and explains why each is absent."},
+    {"part": "temporary fallback", "purpose": "Identifies any local implementation default that is not a brand rule."}
+  ],
+  "props_schema": {
+    "type": "object",
+    "properties": {
+      "section": {"type": "string"},
+      "reason": {"type": "string"},
+      "temporaryFallback": {"type": "string"}
+    },
+    "required": ["section", "reason"],
+    "additionalProperties": false
+  },
+  "tokens": [],
+  "states": [],
+  "responsive": ["Do not infer mobile spacing or typography from desktop-only evidence; record that uncertainty explicitly."],
+  "accessibility": ["A missing color group cannot justify inaccessible contrast; use an explicit temporary accessible fallback."],
+  "implementation_steps": ["Separate confirmed tokens from missing groups.", "Document why each group is omitted and what the agent may decide locally.", "Request a product decision before promoting a fallback into the shared design system."],
+  "source_refs": [{"item_id": "002", "evidence_paths": ["docs/spec.md"], "license_scope": "Apache-2.0 project documentation", "credit": "Google Labs Code DESIGN.md project"}]
+}

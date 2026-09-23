@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://www.ailyre.com/schemas/design-pattern-v1.json",
+  "title": "Ailyre Design Pattern",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id", "title", "summary", "subjects", "frameworks", "keywords",
+    "when_to_use", "avoid_when", "anatomy", "props_schema", "tokens",
+    "states", "responsive", "accessibility", "implementation_steps", "source_refs"
+  ],
+  "properties": {
+    "id": {"type": "string", "pattern": "^[a-z][a-z0-9-]+$"},
+    "title": {"type": "string", "minLength": 4},
+    "summary": {"type": "string", "minLength": 30},
+    "subjects": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+    "frameworks": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["agnostic", "react", "nextjs", "vue", "vanilla"]}},
+    "keywords": {"type": "array", "minItems": 3, "uniqueItems": true, "items": {"type": "string"}},
+    "when_to_use": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "avoid_when": {"type": "array", "items": {"type": "string"}},
+    "anatomy": {
+      "type": "array", "minItems": 2,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["part", "purpose"],
+        "properties": {"part": {"type": "string"}, "purpose": {"type": "string"}, "semantic_hint": {"type": "string"}}
+      }
+    },
+    "props_schema": {"type": "object"},
+    "tokens": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["name", "purpose"],
+        "properties": {"name": {"type": "string"}, "purpose": {"type": "string"}, "example": {"type": "string"}}
+      }
+    },
+    "states": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["name", "behavior"],
+        "properties": {"name": {"type": "string"}, "behavior": {"type": "string"}}
+      }
+    },
+    "responsive": {"type": "array", "items": {"type": "string"}},
+    "accessibility": {"type": "array", "items": {"type": "string"}},
+    "implementation_steps": {"type": "array", "minItems": 2, "items": {"type": "string"}},
+    "source_refs": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["item_id", "evidence_paths", "credit"],
+        "properties": {
+          "item_id": {"type": "string", "pattern": "^[0-9]{3}$"},
+          "evidence_paths": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+          "license_scope": {"type": "string"},
+          "credit": {"type": "string", "minLength": 3}
+        }
+      }
+    }
+  }
+}
