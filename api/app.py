@@ -26,7 +26,7 @@ from fastapi.responses import JSONResponse, PlainTextResponse
 
 import knowledge_api
 
-VERSION = "0.9.0"
+VERSION = "0.9.1"
 DEFAULT_DATA = Path(__file__).resolve().parent.parent
 POLICY = (
     "公网优先提供自有设计模式、结构契约和逐项来源署名。"
