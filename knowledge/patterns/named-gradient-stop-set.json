@@ -1,0 +1,111 @@
+{
+ "id": "named-gradient-stop-set",
+ "title": "Named gradient as angle and color stops",
+ "summary": "Store a gradient as a name, an angle and ordered color stops so an agent can recreate it with the project color system instead of copying a class stylesheet.",
+ "subjects": [
+  "visual-effects",
+  "design-system"
+ ],
+ "frameworks": [
+  "agnostic",
+  "vanilla"
+ ],
+ "keywords": [
+  "gradient",
+  "color stops",
+  "angle",
+  "background",
+  "渐变"
+ ],
+ "when_to_use": [
+  "The user wants a reusable background gradient and can name its role."
+ ],
+ "avoid_when": [
+  "A flat semantic color already does the job, or the user forbade decorative gradients."
+ ],
+ "anatomy": [
+  {
+   "part": "name",
+   "purpose": "Identifies the gradient by role, not by a one-off class from a sample library."
+  },
+  {
+   "part": "angle",
+   "purpose": "Records the direction in degrees."
+  },
+  {
+   "part": "stops",
+   "purpose": "Lists colors and their positions from 0 to 100 percent."
+  }
+ ],
+ "props_schema": {
+  "type": "object",
+  "properties": {
+   "name": {
+    "type": "string"
+   },
+   "angle": {
+    "type": "number"
+   },
+   "stops": {
+    "type": "array",
+    "items": {
+     "type": "object",
+     "properties": {
+      "color": {
+       "type": "string"
+      },
+      "position": {
+       "type": "number"
+      }
+     }
+    }
+   }
+  },
+  "required": [
+   "name",
+   "angle",
+   "stops"
+  ]
+ },
+ "tokens": [
+  {
+   "name": "gradient.angle",
+   "purpose": "Direction of the ramp.",
+   "example": "45deg"
+  },
+  {
+   "name": "gradient.stop.0",
+   "purpose": "Starting color at the first position."
+  },
+  {
+   "name": "gradient.stop.100",
+   "purpose": "Ending color at the last position."
+  }
+ ],
+ "states": [],
+ "responsive": [
+  "Keep the same stop roles when the background is cropped by a shorter viewport."
+ ],
+ "accessibility": [
+  "Do not place body text on a gradient unless every region the text crosses still meets contrast.",
+  "Provide a solid fallback color."
+ ],
+ "implementation_steps": [
+  "Choose or define a named role for the gradient.",
+  "Record angle and stops as data.",
+  "Emit the equivalent in the user stack, such as CSS variables, a theme object or a native brush.",
+  "Do not import an entire third-party gradient stylesheet just to use one ramp."
+ ],
+ "source_refs": [
+  {
+   "item_id": "172",
+   "evidence_paths": [
+    "README.md",
+    "AGENTS.md",
+    "gradients.json"
+   ],
+   "license_scope": "MIT gradient metadata",
+   "credit": "itmeo, WebGradients"
+  }
+ ]
+}

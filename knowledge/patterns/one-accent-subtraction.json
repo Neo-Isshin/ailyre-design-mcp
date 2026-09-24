@@ -1,0 +1,99 @@
+{
+ "id": "one-accent-subtraction",
+ "title": "Subtract template decoration before adding style",
+ "summary": "Remove stacked default decorations until one accent, one voice and a type hierarchy remain, then rebuild that decision in the user stack.",
+ "subjects": [
+  "agent-guidance",
+  "design-system"
+ ],
+ "frameworks": [
+  "agnostic"
+ ],
+ "keywords": [
+  "template look",
+  "one accent",
+  "hierarchy",
+  "visual restraint",
+  "去模板化"
+ ],
+ "when_to_use": [
+  "An existing interface looks like an untouched generator template."
+ ],
+ "avoid_when": [
+  "The user has already specified a deliberate, documented visual system."
+ ],
+ "anatomy": [
+  {
+   "part": "decision",
+   "purpose": "Names the one job of the screen before any new decoration."
+  },
+  {
+   "part": "accent",
+   "purpose": "Keeps a single accent color for primary action, not for every card."
+  },
+  {
+   "part": "hierarchy",
+   "purpose": "Creates order with size and space rather than extra fonts and colored words."
+  },
+  {
+   "part": "remainder",
+   "purpose": "Deletes decorations that do not serve the decision."
+  }
+ ],
+ "props_schema": {
+  "type": "object",
+  "properties": {
+   "accentRole": {
+    "type": "string"
+   },
+   "removed": {
+    "type": "array",
+    "items": {
+     "type": "string"
+    }
+   }
+  },
+  "required": [
+   "accentRole"
+  ]
+ },
+ "tokens": [
+  {
+   "name": "color.accent",
+   "purpose": "The only decorative color, used for the primary action."
+  },
+  {
+   "name": "space.section",
+   "purpose": "The gap that separates sections when color is not doing that job."
+  }
+ ],
+ "states": [
+  {
+   "name": "review",
+   "behavior": "Lists decorations that were removed and the decision they failed to serve."
+  }
+ ],
+ "responsive": [
+  "Re-check hierarchy at narrow widths after decorations are removed, because spacing, not color, has to carry it."
+ ],
+ "accessibility": [
+  "After reducing color, confirm text and controls still meet contrast.",
+  "Do not leave status meaning encoded only in a colored dot or border."
+ ],
+ "implementation_steps": [
+  "State what the screen must help the user do.",
+  "Remove decorations that do not serve that decision.",
+  "Map the remaining accent and spacing onto the project tokens.",
+  "Rewrite the affected views in the current stack instead of pasting a sample stylesheet."
+ ],
+ "source_refs": [
+  {
+   "item_id": "160",
+   "evidence_paths": [
+    "skill/SKILL.md"
+   ],
+   "license_scope": "Apache-2.0 skill text",
+   "credit": "yetone, kill-ai-slop"
+  }
+ ]
+}

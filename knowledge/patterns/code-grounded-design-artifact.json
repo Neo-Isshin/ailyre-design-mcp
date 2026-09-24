@@ -1,0 +1,105 @@
+{
+ "id": "code-grounded-design-artifact",
+ "title": "Design artifact grounded in the current code",
+ "summary": "Verify what the current interface and its data actually do, agree on a mockup, and record decisions before writing a new implementation in the user stack.",
+ "subjects": [
+  "agent-guidance",
+  "screenshot-to-code"
+ ],
+ "frameworks": [
+  "agnostic"
+ ],
+ "keywords": [
+  "mockup",
+  "existing interface",
+  "verified data",
+  "design doc",
+  "对照现有界面"
+ ],
+ "when_to_use": [
+  "The user wants to change a screen that already exists in the repository."
+ ],
+ "avoid_when": [
+  "There is no interface to change, or the fix is already specified and needs no design pass."
+ ],
+ "anatomy": [
+  {
+   "part": "facts",
+   "purpose": "Records the real components, queries and what each displayed value counts."
+  },
+  {
+   "part": "current mockup",
+   "purpose": "Shows the interface as it is, before the proposed change."
+  },
+  {
+   "part": "decision record",
+   "purpose": "Stores what changed between versions and why."
+  },
+  {
+   "part": "implementation handoff",
+   "purpose": "Tells the coding step which decisions are settled."
+  }
+ ],
+ "props_schema": {
+  "type": "object",
+  "properties": {
+   "slug": {
+    "type": "string"
+   },
+   "facts": {
+    "type": "array",
+    "items": {
+     "type": "string"
+    }
+   },
+   "direction": {
+    "type": "string"
+   }
+  },
+  "required": [
+   "slug",
+   "facts"
+  ]
+ },
+ "tokens": [
+  {
+   "name": "artifact.direction",
+   "purpose": "The visual direction taken from the product tokens, not from a generic template."
+  }
+ ],
+ "states": [
+  {
+   "name": "as-is",
+   "behavior": "Matches the current screen before any new idea is drawn."
+  },
+  {
+   "name": "proposed",
+   "behavior": "Changes only the agreed parts and keeps verified facts stable."
+  }
+ ],
+ "responsive": [
+  "Review the mockup at the widths the existing screen already supports."
+ ],
+ "accessibility": [
+  "Carry over the existing names of controls unless the change explicitly alters them.",
+  "Check contrast again if the proposal changes color or type."
+ ],
+ "implementation_steps": [
+  "Read the current component and the data it displays. Write down facts, not guesses.",
+  "Reproduce the current screen, then the proposed change, using the product tokens.",
+  "Record the decision in the project design notes.",
+  "Implement only the settled change in the user stack. Do not ship the exploration mockup as production code."
+ ],
+ "source_refs": [
+  {
+   "item_id": "190",
+   "evidence_paths": [
+    "skills/design-from-code/SKILL.md",
+    "skills/design-from-code/references/artifact-format.md",
+    "skills/design-from-code/references/html-mockup-recipe.md"
+   ],
+   "license_scope": "MIT skill text",
+   "credit": "nlook, design-from-code"
+  }
+ ]
+}

@@ -5,7 +5,7 @@ This directory is the public-ready, text-only knowledge layer of Site Collection
 - `patterns/`: normalized design patterns, anatomy, props, tokens, behavior, constraints and source references.
 - `pattern.schema.json`: required structure for every pattern.
 - `routes.csv`: one decision for every source item about inclusion and external routing.
-- `ROUTING_AUDIT.md`: a human-readable decision for all 126 source items.
+- `ROUTING_AUDIT.md`: a human-readable decision for all 190 source items.
 - `SOURCES.md`: consolidated credits for the authored patterns.
 - `ATTRIBUTION_NOTICE.md`: public attribution text suitable for the API-key instructions page.
 - `PUBLISHING.md`: the exact export boundary for a future public GitHub repository.

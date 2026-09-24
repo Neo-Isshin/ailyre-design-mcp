@@ -68,6 +68,7 @@ def build_mcp_server(include_local: bool = True) -> MCPServer:
         design_subject: str | None = None,
         design_unit: str | None = None,
         platform: str | None = None,
+        operating_system: str | None = None,
         access_path: str | None = None,
         provider_tier: str | None = None,
         catalog_status: str | None = None,
@@ -100,7 +101,7 @@ def build_mcp_server(include_local: bool = True) -> MCPServer:
                 continue
             if not catalog.matches_taxonomy(
                 i, resource_role=resource_role, design_subject=design_subject,
-                design_unit=design_unit, platform=platform, access_path=access_path,
+                design_unit=design_unit, platform=platform, operating_system=operating_system, access_path=access_path,
                 provider_tier=provider_tier, catalog_status=catalog_status,
                 aesthetic=aesthetic, technique=technique,
             ):
@@ -145,14 +146,22 @@ def build_mcp_server(include_local: bool = True) -> MCPServer:
             local_only=bool(local_only),
             no_auth=bool(no_auth),
         )
+        patterns = knowledge_api.search_patterns(
+            catalog.data_dir(), brief, catalog.load_items(), limit=min(int(limit), 5),
+        )
         return _json(
             {
                 "brief": brief,
                 "budget_stage": budget_stage,
                 "total": len(items),
+                "self_patterns": patterns,
                 "items": items,
                 "next_stage": "free-tier" if budget_stage == "free" else "paid-with-user-consent" if budget_stage == "free-tier" else None,
-                "next_step": "Call get_entry for 1-3 candidates before installing, executing, or contacting a provider",
+                "next_step": (
+                    "Call get_pattern and implement fresh code in the user's stack. Catalog items are sources, not the implementation."
+                    if patterns else
+                    "Call get_entry for 1-3 candidates before installing, executing, or contacting a provider"
+                ),
             }
         )
 
@@ -269,7 +278,7 @@ def build_mcp_server(include_local: bool = True) -> MCPServer:
         payload: dict[str, Any] = {k: item.get(k) or "" for k in keys}
         payload["style"] = item.get("style") or []
         payload["highlights"] = item.get("highlights") or []
-        for field in ("design_subjects", "design_units", "platforms", "access_paths", "aesthetic", "techniques"):
+        for field in ("design_subjects", "design_units", "platforms", "operating_systems", "access_paths", "aesthetic", "techniques"):
             payload[field] = item.get(field) or []
         payload["how_to_use"] = catalog.how_to_use(item, local_access=include_local)
         payload["content_mode"] = "local" if include_local and item.get("has_archive") else "guidance"

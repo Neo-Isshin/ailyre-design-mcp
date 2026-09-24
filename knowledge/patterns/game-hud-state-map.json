@@ -1,0 +1,116 @@
+{
+ "id": "game-hud-state-map",
+ "title": "Game HUD state and zone map",
+ "summary": "Inventory every game-interface state and place status, objectives and controls in stable zones so an agent can rebuild the HUD in the user stack instead of copying a sample scene.",
+ "subjects": [
+  "game-ui",
+  "agent-guidance"
+ ],
+ "frameworks": [
+  "agnostic"
+ ],
+ "keywords": [
+  "hud",
+  "game ui",
+  "safe area",
+  "touch controls",
+  "游戏界面"
+ ],
+ "when_to_use": [
+  "The user is designing a playable game overlay, pause flow, or touch controls."
+ ],
+ "avoid_when": [
+  "The surface is a marketing page or an admin dashboard."
+ ],
+ "anatomy": [
+  {
+   "part": "state inventory",
+   "purpose": "Lists gameplay, pause, settings, fail, win, loading and touch-control states before any visual styling."
+  },
+  {
+   "part": "priority stack",
+   "purpose": "Orders survival and status above objectives, then immediate feedback, then flavor."
+  },
+  {
+   "part": "zones",
+   "purpose": "Reserves corners and edges for status, objectives and touch controls, leaving the play path clear."
+  },
+  {
+   "part": "state binding",
+   "purpose": "Connects visible meters to game state instead of reimplementing rules inside the view."
+  }
+ ],
+ "props_schema": {
+  "type": "object",
+  "properties": {
+   "states": {
+    "type": "array",
+    "items": {
+     "type": "string"
+    }
+   },
+   "primaryStatus": {
+    "type": "string"
+   },
+   "safeArea": {
+    "type": "boolean"
+   }
+  },
+  "required": [
+   "states"
+  ]
+ },
+ "tokens": [
+  {
+   "name": "hud.zone.inset",
+   "purpose": "Padding that keeps controls inside the device safe area."
+  },
+  {
+   "name": "hud.numeric.width",
+   "purpose": "Fixed width for values that change digits during play."
+  },
+  {
+   "name": "hud.alert.danger",
+   "purpose": "One color role for danger, distinct from reward and objective."
+  }
+ ],
+ "states": [
+  {
+   "name": "gameplay",
+   "behavior": "Shows only the status and controls needed while playing."
+  },
+  {
+   "name": "pause",
+   "behavior": "Pauses interaction and puts resume first."
+  },
+  {
+   "name": "fail",
+   "behavior": "Offers a retry without covering the cause of failure."
+  }
+ ],
+ "responsive": [
+  "Check the longest expected numbers and labels at phone width and at desktop width.",
+  "Add touch controls only when mobile play is actually in scope."
+ ],
+ "accessibility": [
+  "Keep touch targets large enough to hit while the device is moving.",
+  "Do not convey danger by color alone."
+ ],
+ "implementation_steps": [
+  "List the states the user actually needs.",
+  "Assign each readout to a zone and a token role.",
+  "Implement the layout in the user stack, bound to existing game state.",
+  "Verify text fit, overlap and focus states with the longest values."
+ ],
+ "source_refs": [
+  {
+   "item_id": "137",
+   "evidence_paths": [
+    "skills/threejs-game-ui-designer/SKILL.md",
+    "skills/threejs-game-ui-designer/references/ui-patterns.md"
+   ],
+   "license_scope": "MIT skill text",
+   "credit": "Majid Manzarpour, threejs-game-skills"
+  }
+ ]
+}

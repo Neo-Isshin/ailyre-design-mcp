@@ -1,0 +1,116 @@
+{
+ "id": "adaptive-system-controls",
+ "title": "Adaptive control constraints",
+ "summary": "Keep shared design constants, flexible frames and system text styles so controls survive different device sizes and accessibility settings. Translate the constraints into the user stack rather than pasting framework calls.",
+ "subjects": [
+  "mobile-ux",
+  "components",
+  "agent-guidance"
+ ],
+ "frameworks": [
+  "agnostic"
+ ],
+ "keywords": [
+  "dynamic type",
+  "tap target",
+  "reduce motion",
+  "shared constants",
+  "自适应控件"
+ ],
+ "when_to_use": [
+  "The user is building or reviewing interactive controls that must work across device sizes."
+ ],
+ "avoid_when": [
+  "The task is a static illustration with no interactive controls."
+ ],
+ "anatomy": [
+  {
+   "part": "shared constants",
+   "purpose": "Holds type, color, spacing, radius and motion durations in one place."
+  },
+  {
+   "part": "flexible frame",
+   "purpose": "Sizes controls from the container instead of the full screen."
+  },
+  {
+   "part": "text label",
+   "purpose": "Gives every icon control a name, even when the name is visually hidden."
+  },
+  {
+   "part": "motion fallback",
+   "purpose": "Replaces large movement with opacity when the user reduces motion."
+  }
+ ],
+ "props_schema": {
+  "type": "object",
+  "properties": {
+   "label": {
+    "type": "string"
+   },
+   "minTarget": {
+    "type": "number"
+   },
+   "reduceMotion": {
+    "type": "boolean"
+   }
+  },
+  "required": [
+   "label"
+  ]
+ },
+ "tokens": [
+  {
+   "name": "control.min-target",
+   "purpose": "Minimum interactive size, 44 by 44 points on iOS and an equivalent physical target elsewhere.",
+   "example": "44pt"
+  },
+  {
+   "name": "type.body",
+   "purpose": "A text role that scales with the user text-size setting."
+  },
+  {
+   "name": "motion.reduced",
+   "purpose": "Opacity change used when movement is disabled."
+  }
+ ],
+ "states": [
+  {
+   "name": "default",
+   "behavior": "Uses the shared constants."
+  },
+  {
+   "name": "reduced-motion",
+   "behavior": "Drops large transitions and keeps state changes visible through opacity or instant swap."
+  },
+  {
+   "name": "disabled",
+   "behavior": "Remains named by assistive tech and is not indicated by color alone."
+  }
+ ],
+ "responsive": [
+  "Avoid fixed frames unless the content is known to fit at the largest text size.",
+  "Read available space from the container, not from the screen size."
+ ],
+ "accessibility": [
+  "Respect dynamic text size, reduce motion, and differentiate-without-color.",
+  "Icon-only controls still expose a text label to assistive technologies."
+ ],
+ "implementation_steps": [
+  "Collect the project constants for type, space, color and motion.",
+  "Give each control a label and a minimum target size.",
+  "Implement the control with the user framework APIs that honor text size and reduced motion.",
+  "Check an empty state and a long label at the largest text setting."
+ ],
+ "source_refs": [
+  {
+   "item_id": "163",
+   "evidence_paths": [
+    "swiftui-pro/references/design.md",
+    "swiftui-pro/references/accessibility.md",
+    "swiftui-pro/SKILL.md"
+   ],
+   "license_scope": "MIT skill references",
+   "credit": "Paul Hudson, SwiftUI Agent Skill"
+  }
+ ]
+}

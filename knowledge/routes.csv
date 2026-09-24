@@ -125,3 +125,67 @@ item_id,catalog_status,knowledge_status,pattern_ids,route_modes,canonical_item_i
 124,alias,alias,,redirect-item,013,,,none,paid,browser;login;paywall,proprietary,https://designvault.io,2026-09-23,Legacy address; use the canonical item.
 125,active,reference-only,,source-link,,,,none,none,browser,proprietary,https://animatedicons.co,2026-09-23,Proprietary source remains an authored summary and source link.
 126,active,candidate,,source-link,,,,none,none,node;browser,MIT,https://cruxgarden.github.io/plasma-ui/,2026-09-23,Permissive source is available for text-only pattern extraction after review.
+127,active,reference-only,,source-link,,,,none,free,browser,proprietary,https://deck.gallery,2026-09-23,Proprietary source remains an authored summary and source link.
+128,active,reference-only,,source-link,,,,none,none,browser,proprietary,https://animos.app,2026-09-23,Proprietary source remains an authored summary and source link.
+129,active,reference-only,,source-link,,,,none,none,browser,proprietary,https://backgrounds.supply,2026-09-23,Proprietary source remains an authored summary and source link.
+130,active,candidate,,source-link,,,,none,none,browser,MIT,https://animatedbuttons.colorion.co,2026-09-23,Permissive source is available for text-only pattern extraction after review.
+131,active,candidate,,source-link,,,,none,none,node;browser,MIT,https://keylineicons.com,2026-09-23,Permissive source is available for text-only pattern extraction after review.
+132,active,reference-only,,source-link,,,,none,none,browser,proprietary,https://studio.morflax.com,2026-09-23,Proprietary source remains an authored summary and source link.
+133,active,reference-only,,source-link,,,,none,free-tier,browser,proprietary,https://originkit.dev,2026-09-23,Proprietary source remains an authored summary and source link.
+134,active,reference-only,,source-link,,,,none,none,browser;login,proprietary,https://designmd-store.com,2026-09-23,Proprietary source remains an authored summary and source link.
+135,active,rights-review,,source-link,024,,,none,free-tier,node;api-key,unknown,https://github.com/hyperbrowserai/hyperbrowser-app-examples,2026-09-23,License scope or permission needs case-by-case review before ingestion.
+136,active,rights-review,,source-link,,,,none,none,无,unspecified,https://design.ricoui.com/brands,2026-09-24,License scope or permission needs case-by-case review before ingestion.
+137,active,included,game-hud-state-map,self-pattern; source-link,,,,none,none,node;agent,MIT,https://github.com/majidmanzarpour/threejs-game-skills,2026-09-24,An authored pattern with source attribution is in the knowledge repository.
+138,active,candidate,,source-link,,,,none,none,无,MIT,https://state-of-ai-in-design-systems.netlify.app,2026-09-24,Permissive source is available for text-only pattern extraction after review.
+139,adjacent,out-of-scope,,source-link,,,,none,none,python,MIT,https://github.com/3b1b/manim,2026-09-24,Adjacent topic; not part of default front-end pattern search.
+140,active,rights-review,,source-link,,,,none,none,browser,AGPL-3.0,https://penecho.ai,2026-09-24,License scope or permission needs case-by-case review before ingestion.
+141,active,candidate,,source-link,,,,none,none,node,Apache-2.0,https://heroui.com,2026-09-24,Permissive source is available for text-only pattern extraction after review.
+142,adjacent,out-of-scope,,source-link,,,,none,none,无,MIT,https://gpt-image2.canghe.ai,2026-09-24,Adjacent topic; not part of default front-end pattern search.
+143,active,reference-only,,source-link,,,,none,none,agent,PolyForm-Noncommercial-1.0.0,https://github.com/larashero3-dotcom/lieflat-charts,2026-09-24,Proprietary source remains an authored summary and source link.
+144,active,rights-review,,source-link,,,,none,none,无,unspecified,https://grok-icon-study.vercel.app/,2026-09-24,License scope or permission needs case-by-case review before ingestion.
+145,adjacent,out-of-scope,,source-link,,,,none,none,agent,AGPL-3.0,https://www.openmontage.video/,2026-09-24,Adjacent topic; not part of default front-end pattern search.
+146,adjacent,out-of-scope,,source-link,,,,none,none,node,GPL-3.0,https://markcard.woollypix.cn/,2026-09-24,Adjacent topic; not part of default front-end pattern search.
+147,active,reference-only,,source-link,,,,none,none,无,OFL-1.1,https://github.com/lxgw/LxgwWenKai,2026-09-24,Proprietary source remains an authored summary and source link.
+148,active,reference-only,,source-link,,,,none,none,无,IPA-1.0,https://github.com/lxgw/LxgwNeoZhiSong,2026-09-24,Proprietary source remains an authored summary and source link.
+149,active,reference-only,,source-link,,,,none,none,无,IPA-1.0,https://github.com/lxgw/LxgwNeoXiHei,2026-09-24,Proprietary source remains an authored summary and source link.
+150,adjacent,out-of-scope,,source-link,,,,none,none,agent,AGPL-3.0,https://github.com/isjiamu/gzh-design-skill,2026-09-24,Adjacent topic; not part of default front-end pattern search.
+151,active,candidate,,source-link,,,,none,none,browser,MIT,https://tabler.io,2026-09-24,Permissive source is available for text-only pattern extraction after review.
+152,active,needs-source-verification,,source-link,,,,none,none,无,MIT,https://tabler.io/icons,2026-09-24,"Permissive license recorded, but source is not locally archived."
+153,active,candidate,,source-link,,,,none,none,browser,MIT,https://colorpalette.pro,2026-09-24,Permissive source is available for text-only pattern extraction after review.
+154,active,candidate,,source-link,,,,none,none,node;agent,Apache-2.0,https://open-design.ai/html-anything/,2026-09-24,Permissive source is available for text-only pattern extraction after review.
+155,active,reference-only,,source-link,,,,none,none,agent;image-model,proprietary,https://github.com/adrianpunk/Punk-Skill,2026-09-24,Proprietary source remains an authored summary and source link.
+156,adjacent,out-of-scope,,source-link,,,,none,none,agent,MIT,https://plateau.vibecoco.ai,2026-09-24,Adjacent topic; not part of default front-end pattern search.
+157,active,candidate,,source-link,,,,none,none,browser;agent,MIT,https://github.com/zhongerxin/Cowart,2026-09-24,Permissive source is available for text-only pattern extraction after review.
+158,active,rights-review,,source-link,,,,none,none,agent;image-model,unspecified,https://github.com/op7418/guizang-yingzao-skill,2026-09-24,License scope or permission needs case-by-case review before ingestion.
+159,active,rights-review,,source-link,,,,none,none,node,MIT+Commons-Clause,https://canvasui.dev/,2026-09-24,License scope or permission needs case-by-case review before ingestion.
+160,active,included,one-accent-subtraction,self-pattern; source-link,,,,none,none,agent,Apache-2.0,https://github.com/yetone/kill-ai-slop,2026-09-24,An authored pattern with source attribution is in the knowledge repository.
+161,active,rights-review,,source-link,,,,none,none,python,AGPL-3.0,https://prettymaps.streamlit.app/,2026-09-24,License scope or permission needs case-by-case review before ingestion.
+162,active,candidate,,source-link,,,,none,none,node,MIT,https://github.com/arwes/arwes,2026-09-24,Permissive source is available for text-only pattern extraction after review.
+163,active,included,adaptive-system-controls,self-pattern; source-link,,,,none,none,agent,MIT,https://github.com/twostraws/SwiftUI-Agent-Skill,2026-09-24,An authored pattern with source attribution is in the knowledge repository.
+164,active,candidate,,source-link,,,,none,none,agent;image-model,MIT,https://github.com/0x0funky/agent-sprite-forge,2026-09-24,Permissive source is available for text-only pattern extraction after review.
+165,active,rights-review,,source-link,,,,none,none,node,unspecified,https://meodai.github.io/dittoTones/,2026-09-24,License scope or permission needs case-by-case review before ingestion.
+166,active,candidate,,source-link,,,,none,none,node,MIT,https://op.zseven.tech,2026-09-24,Permissive source is available for text-only pattern extraction after review.
+167,active,candidate,,source-link,,,,none,none,agent,MIT,https://github.com/JimLiu/baoyu-skills,2026-09-24,Permissive source is available for text-only pattern extraction after review.
+168,active,candidate,,source-link,,,,none,none,node,MIT,https://www.dicebear.com,2026-09-24,Permissive source is available for text-only pattern extraction after review.
+169,active,candidate,,source-link,,,,none,none,agent,MIT,https://nolangz.github.io/pixel2motion/,2026-09-24,Permissive source is available for text-only pattern extraction after review.
+170,active,reference-only,,source-link,,,,none,none,无,OFL-1.1,https://font.subf.dev,2026-09-24,Proprietary source remains an authored summary and source link.
+171,active,candidate,,source-link,,,,none,none,browser,MIT,https://notion-avatar.app,2026-09-24,Permissive source is available for text-only pattern extraction after review.
+172,active,included,named-gradient-stop-set,self-pattern; source-link,,,,none,none,无,MIT,https://webgradients.com,2026-09-24,An authored pattern with source attribution is in the knowledge repository.
+173,active,rights-review,,source-link,,,,none,none,无,unspecified,https://www.siddhant.ca,2026-09-24,License scope or permission needs case-by-case review before ingestion.
+174,active,candidate,,source-link,,,,none,none,agent,MIT,https://yizhiyanhua-ai.github.io/fireworks-tech-graph/,2026-09-24,Permissive source is available for text-only pattern extraction after review.
+175,active,candidate,,source-link,,,,none,none,无,MIT,https://shipswift.app,2026-09-24,Permissive source is available for text-only pattern extraction after review.
+176,active,candidate,,source-link,,,,none,none,node,MIT,https://github.com/chaos-xxl/zelda-hyrule-ui,2026-09-24,Permissive source is available for text-only pattern extraction after review.
+177,active,candidate,,source-link,,,,none,none,node,MIT,https://ngbrutalism.khangtran.dev,2026-09-24,Permissive source is available for text-only pattern extraction after review.
+178,active,reference-only,,source-link,,,,none,none,无,ISC,https://lucide.dev,2026-09-24,Proprietary source remains an authored summary and source link.
+179,active,candidate,,source-link,,,,none,none,browser,MIT,https://learnui.qiaomu.ai/,2026-09-24,Permissive source is available for text-only pattern extraction after review.
+180,active,candidate,,source-link,,,,none,none,node,MIT,https://semi.design,2026-09-24,Permissive source is available for text-only pattern extraction after review.
+181,active,included,retro-window-regions,self-pattern; source-link,,,,none,none,无,MIT,https://jdan.github.io/98.css,2026-09-24,An authored pattern with source attribution is in the knowledge repository.
+182,active,included,role-based-design-brief,self-pattern; source-link,,,,none,none,无,MIT,https://www.spectr.to/gallery,2026-09-24,An authored pattern with source attribution is in the knowledge repository.
+183,active,reference-only,,source-link,,,,none,none,无,CC0-1.0,https://nieobie.itch.io/free-icons,2026-09-24,Proprietary source remains an authored summary and source link.
+184,adjacent,out-of-scope,,source-link,,,,none,none,无,MIT,https://wess.io/guise,2026-09-24,Adjacent topic; not part of default front-end pattern search.
+185,active,candidate,,source-link,,,,none,none,node,MIT,https://github.com/awdr74100/figwright,2026-09-24,Permissive source is available for text-only pattern extraction after review.
+186,active,candidate,,source-link,,,,none,none,agent,MIT,https://www.usehallmark.com/,2026-09-24,Permissive source is available for text-only pattern extraction after review.
+187,active,candidate,,source-link,,,,none,none,node;agent,Apache-2.0,https://github.com/nexu-io/motion-anything,2026-09-24,Permissive source is available for text-only pattern extraction after review.
+188,active,candidate,,source-link,,,,none,none,无,MIT,https://github.com/satasuk03/micro-gfx,2026-09-24,Permissive source is available for text-only pattern extraction after review.
+189,active,reference-only,,source-link,,,,none,none,node,CC-BY-NC-4.0,https://guokaigdg.github.io/animal-island-ui/,2026-09-24,Proprietary source remains an authored summary and source link.
+190,active,included,code-grounded-design-artifact,self-pattern; source-link,,,,none,none,agent,MIT,https://nlook.me,2026-09-24,An authored pattern with source attribution is in the knowledge repository.

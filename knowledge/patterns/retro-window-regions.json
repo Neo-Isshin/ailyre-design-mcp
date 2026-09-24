@@ -1,0 +1,107 @@
+{
+ "id": "retro-window-regions",
+ "title": "Semantic window regions",
+ "summary": "Build a desktop-style window from named regions, a title and a body, using the project own CSS. Do not ship bundled icon sprites or third-party font files.",
+ "subjects": [
+  "components"
+ ],
+ "frameworks": [
+  "agnostic",
+  "vanilla"
+ ],
+ "keywords": [
+  "window",
+  "title bar",
+  "dialog",
+  "semantic regions",
+  "窗口"
+ ],
+ "when_to_use": [
+  "The user wants a dialog or window metaphor and can accept a recreated treatment."
+ ],
+ "avoid_when": [
+  "The user needs the operating system native window, or a trademarked system font."
+ ],
+ "anatomy": [
+  {
+   "part": "window",
+   "purpose": "The outer frame."
+  },
+  {
+   "part": "title bar",
+   "purpose": "Names the window and holds window controls."
+  },
+  {
+   "part": "body",
+   "purpose": "Holds the window content."
+  },
+  {
+   "part": "action row",
+   "purpose": "Places the primary and secondary actions."
+  }
+ ],
+ "props_schema": {
+  "type": "object",
+  "properties": {
+   "title": {
+    "type": "string"
+   },
+   "actions": {
+    "type": "array",
+    "items": {
+     "type": "string"
+    }
+   }
+  },
+  "required": [
+   "title"
+  ]
+ },
+ "tokens": [
+  {
+   "name": "window.frame",
+   "purpose": "Border treatment of the outer frame."
+  },
+  {
+   "name": "window.title.background",
+   "purpose": "Title bar fill."
+  },
+  {
+   "name": "window.body.padding",
+   "purpose": "Inset of the content."
+  }
+ ],
+ "states": [
+  {
+   "name": "active",
+   "behavior": "Shows the window as the current dialog."
+  },
+  {
+   "name": "inactive",
+   "behavior": "Dims the title treatment without hiding the title text."
+  }
+ ],
+ "responsive": [
+  "Let the window width follow the viewport up to a readable maximum, instead of a single fixed pixel width."
+ ],
+ "accessibility": [
+  "Expose the window as a dialog with an accessible name taken from the title.",
+  "Move focus into the window when it opens and return focus when it closes."
+ ],
+ "implementation_steps": [
+  "Mark up the frame, title and body as separate regions.",
+  "Recreate the border and title treatment with project-owned CSS or theme values.",
+  "Do not copy bundled font files or icon sprites; use a licensed font and text or icons the user already has.",
+  "Wire focus and the accessible name in the user stack."
+ ],
+ "source_refs": [
+  {
+   "item_id": "181",
+   "evidence_paths": [
+    "README.md"
+   ],
+   "license_scope": "MIT documentation only; bundled font files and icon sprites were not retained",
+   "credit": "Jordan Scales, 98.css"
+  }
+ ]
+}

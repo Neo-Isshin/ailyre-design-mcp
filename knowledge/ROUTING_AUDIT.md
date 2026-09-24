@@ -1,11 +1,11 @@
 # 全目录知识与接口路由审查
 
-覆盖 126 个来源。`knowledge_status` 表示能否进入自有模式仓；`route_modes` 表示 Agent 可走的实际路径。提供方接口始终由用户自己的账号连接，本服务不代调。
+覆盖 190 个来源。`knowledge_status` 表示能否进入自有模式仓；`route_modes` 表示 Agent 可走的实际路径。提供方接口始终由用户自己的账号连接，本服务不代调。
 
 ## 汇总
 
-- 自有仓判定：alias 2, candidate 31, included 6, included-scoped 1, needs-source-verification 1, out-of-scope 9, reference-only 63, rights-review 13
-- 提供方接口判定：needs-live-recheck 9, none 97, provider-documented 16, unofficial-not-routed 4
+- 自有仓判定：alias 2, candidate 56, included 13, included-scoped 1, needs-source-verification 2, out-of-scope 16, reference-only 78, rights-review 22
+- 提供方接口判定：needs-live-recheck 9, none 161, provider-documented 16, unofficial-not-routed 4
 - 自有模式在 `knowledge/patterns/`；来源登记在 `index.csv`。专有站点只提供自写摘要、事实分类和原站链接。
 
 ## 逐条决定
@@ -138,3 +138,67 @@
 | 124 | Design Vault (now ScreensDesign) | alias | redirect-item | none | Legacy address; use the canonical item. |
 | 125 | AnimatedIcons.co | reference-only | source-link | none | Proprietary source remains an authored summary and source link. |
 | 126 | Plasma UI | candidate | source-link | none | Permissive source is available for text-only pattern extraction after review. |
+| 127 | Deck.gallery | reference-only | source-link | none | Proprietary source remains an authored summary and source link. |
+| 128 | animos | reference-only | source-link | none | Proprietary source remains an authored summary and source link. |
+| 129 | Backgrounds Supply | reference-only | source-link | none | Proprietary source remains an authored summary and source link. |
+| 130 | Colorion Animated Buttons | candidate | source-link | none | Permissive source is available for text-only pattern extraction after review. |
+| 131 | Keyline Icons | candidate | source-link | none | Permissive source is available for text-only pattern extraction after review. |
+| 132 | Morflax Studio | reference-only | source-link | none | Proprietary source remains an authored summary and source link. |
+| 133 | Originkit | reference-only | source-link | none | Proprietary source remains an authored summary and source link. |
+| 134 | Design.md Store | reference-only | source-link | none | Proprietary source remains an authored summary and source link. |
+| 135 | Hyperbrowser App Examples | rights-review | source-link | none | License scope or permission needs case-by-case review before ingestion. |
+| 136 | Brands DESIGN.md | rights-review | source-link | none | License scope or permission needs case-by-case review before ingestion. |
+| 137 | threejs-game-skills | included | self-pattern; source-link | none | An authored pattern with source attribution is in the knowledge repository. |
+| 138 | State of AI in Design Systems | candidate | source-link | none | Permissive source is available for text-only pattern extraction after review. |
+| 139 | Manim | out-of-scope | source-link | none | Adjacent topic; not part of default front-end pattern search. |
+| 140 | PenEcho | rights-review | source-link | none | License scope or permission needs case-by-case review before ingestion. |
+| 141 | HeroUI | candidate | source-link | none | Permissive source is available for text-only pattern extraction after review. |
+| 142 | awesome-gpt-image-2 | out-of-scope | source-link | none | Adjacent topic; not part of default front-end pattern search. |
+| 143 | Lieflat Charts | reference-only | source-link | none | Proprietary source remains an authored summary and source link. |
+| 144 | grok-icon-study | rights-review | source-link | none | License scope or permission needs case-by-case review before ingestion. |
+| 145 | OpenMontage | out-of-scope | source-link | none | Adjacent topic; not part of default front-end pattern search. |
+| 146 | MarkCard Studio | out-of-scope | source-link | none | Adjacent topic; not part of default front-end pattern search. |
+| 147 | 霞鹜文楷 | reference-only | source-link | none | Proprietary source remains an authored summary and source link. |
+| 148 | 霞鹜新致宋 | reference-only | source-link | none | Proprietary source remains an authored summary and source link. |
+| 149 | 霞鹜新晰黑 | reference-only | source-link | none | Proprietary source remains an authored summary and source link. |
+| 150 | gzh-design-skill | out-of-scope | source-link | none | Adjacent topic; not part of default front-end pattern search. |
+| 151 | Tabler | candidate | source-link | none | Permissive source is available for text-only pattern extraction after review. |
+| 152 | Tabler Icons | needs-source-verification | source-link | none | Permissive license recorded, but source is not locally archived. |
+| 153 | ColorPalette Pro | candidate | source-link | none | Permissive source is available for text-only pattern extraction after review. |
+| 154 | HTML Anything | candidate | source-link | none | Permissive source is available for text-only pattern extraction after review. |
+| 155 | Punk-Skill | reference-only | source-link | none | Proprietary source remains an authored summary and source link. |
+| 156 | novel-to-game | out-of-scope | source-link | none | Adjacent topic; not part of default front-end pattern search. |
+| 157 | Cowart | candidate | source-link | none | Permissive source is available for text-only pattern extraction after review. |
+| 158 | guizang-yingzao-skill | rights-review | source-link | none | License scope or permission needs case-by-case review before ingestion. |
+| 159 | Canvas UI | rights-review | source-link | none | License scope or permission needs case-by-case review before ingestion. |
+| 160 | kill-ai-slop | included | self-pattern; source-link | none | An authored pattern with source attribution is in the knowledge repository. |
+| 161 | prettymaps | rights-review | source-link | none | License scope or permission needs case-by-case review before ingestion. |
+| 162 | Arwes | candidate | source-link | none | Permissive source is available for text-only pattern extraction after review. |
+| 163 | SwiftUI Agent Skill | included | self-pattern; source-link | none | An authored pattern with source attribution is in the knowledge repository. |
+| 164 | AgentSpriteForge | candidate | source-link | none | Permissive source is available for text-only pattern extraction after review. |
+| 165 | dittoTones | rights-review | source-link | none | License scope or permission needs case-by-case review before ingestion. |
+| 166 | OpenPencil | candidate | source-link | none | Permissive source is available for text-only pattern extraction after review. |
+| 167 | baoyu-skills | candidate | source-link | none | Permissive source is available for text-only pattern extraction after review. |
+| 168 | DiceBear | candidate | source-link | none | Permissive source is available for text-only pattern extraction after review. |
+| 169 | Pixel2Motion | candidate | source-link | none | Permissive source is available for text-only pattern extraction after review. |
+| 170 | Maple Mono | reference-only | source-link | none | Proprietary source remains an authored summary and source link. |
+| 171 | Notion Avatar | candidate | source-link | none | Permissive source is available for text-only pattern extraction after review. |
+| 172 | WebGradients | included | self-pattern; source-link | none | An authored pattern with source attribution is in the knowledge repository. |
+| 173 | ShadowKit | rights-review | source-link | none | License scope or permission needs case-by-case review before ingestion. |
+| 174 | fireworks-tech-graph | candidate | source-link | none | Permissive source is available for text-only pattern extraction after review. |
+| 175 | ShipSwift | candidate | source-link | none | Permissive source is available for text-only pattern extraction after review. |
+| 176 | zelda-hyrule-ui | candidate | source-link | none | Permissive source is available for text-only pattern extraction after review. |
+| 177 | ng-brutalism | candidate | source-link | none | Permissive source is available for text-only pattern extraction after review. |
+| 178 | Lucide | reference-only | source-link | none | Proprietary source remains an authored summary and source link. |
+| 179 | learnui | candidate | source-link | none | Permissive source is available for text-only pattern extraction after review. |
+| 180 | Semi Design | candidate | source-link | none | Permissive source is available for text-only pattern extraction after review. |
+| 181 | 98.css | included | self-pattern; source-link | none | An authored pattern with source attribution is in the knowledge repository. |
+| 182 | awesome-ios-design-md | included | self-pattern; source-link | none | An authored pattern with source attribution is in the knowledge repository. |
+| 183 | game-icon-pack | reference-only | source-link | none | Proprietary source remains an authored summary and source link. |
+| 184 | Guise | out-of-scope | source-link | none | Adjacent topic; not part of default front-end pattern search. |
+| 185 | Figwright | candidate | source-link | none | Permissive source is available for text-only pattern extraction after review. |
+| 186 | Hallmark | candidate | source-link | none | Permissive source is available for text-only pattern extraction after review. |
+| 187 | motion-anything | candidate | source-link | none | Permissive source is available for text-only pattern extraction after review. |
+| 188 | micro-gfx | candidate | source-link | none | Permissive source is available for text-only pattern extraction after review. |
+| 189 | Animal Island UI | reference-only | source-link | none | Proprietary source remains an authored summary and source link. |
+| 190 | design-from-code | included | self-pattern; source-link | none | An authored pattern with source attribution is in the knowledge repository. |

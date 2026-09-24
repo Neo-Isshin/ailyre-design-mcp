@@ -34,7 +34,9 @@ def _cached_patterns(directory: str, fingerprint: tuple[tuple[str, int], ...]) -
 
 def load_patterns(data_root: Path) -> dict[str, dict[str, Any]]:
     directory = _knowledge_root(data_root) / "patterns"
-    fingerprint = tuple(sorted((p.name, p.stat().st_mtime_ns) for p in directory.glob("*.json")))
+    if not directory.is_dir():
+        return {}
+    fingerprint = tuple(sorted((path.name, path.stat().st_mtime_ns) for path in directory.glob("*.json")))
     return _cached_patterns(str(directory), fingerprint)
 
 
@@ -107,6 +109,33 @@ def source_credits(pattern: dict[str, Any], source_items: list[dict[str, Any]]) 
     return credits
 
 
+USE_POLICY = "Implement fresh code in the user's stack. Cite these sources; do not copy or fetch third-party media."
+
+# A Chinese brief should meet English pattern keywords, and the reverse.
+QUERY_ALIASES: tuple[tuple[str, ...], ...] = (
+    ("按钮", "button"),
+    ("可访问", "无障碍", "accessible"),
+    ("组件", "component"),
+    ("渐变", "gradient"),
+    ("窗口", "window", "dialog"),
+    ("控件", "control"),
+    ("自适应", "adaptive"),
+    ("后台", "管理台", "dashboard"),
+    ("图标", "icon"),
+    ("动效", "动画", "motion"),
+    ("游戏", "hud"),
+    ("安全区", "safe area"),
+)
+
+
+def expand_query_terms(brief_lower: str, terms: set[str]) -> set[str]:
+    expanded = set(terms)
+    for group in QUERY_ALIASES:
+        if any(alias in brief_lower for alias in group):
+            expanded.update(group)
+    return expanded
+
+
 def get_pattern(data_root: Path, pattern_id: str, source_items: list[dict[str, Any]]) -> dict[str, Any]:
     pattern = load_patterns(data_root).get(pattern_id)
     if pattern is None:
@@ -114,7 +143,7 @@ def get_pattern(data_root: Path, pattern_id: str, source_items: list[dict[str, A
     return {
         **pattern,
         "source_credits": source_credits(pattern, source_items),
-        "use_policy": "Implement fresh code in the user's stack. Cite these sources; do not copy or fetch third-party media.",
+        "use_policy": USE_POLICY,
     }
 
 
@@ -126,13 +155,17 @@ def search_patterns(
     if len(brief_lower) < 2:
         raise ValueError("brief must have at least two characters")
     terms = {term for term in re.findall(r"[a-z0-9]+|[\u4e00-\u9fff]+", brief_lower) if len(term) >= 2}
+    terms = expand_query_terms(brief_lower, terms)
     ranked: list[tuple[int, str, dict[str, Any], list[str]]] = []
     for pattern in load_patterns(data_root).values():
         frameworks = set(pattern["frameworks"])
         compatible = not framework or "agnostic" in frameworks or framework in frameworks or framework == "nextjs" and "react" in frameworks
         if not compatible or subject and subject not in pattern["subjects"]:
             continue
-        keyword_hits = [k for k in pattern["keywords"] if k.lower() in brief_lower]
+        keyword_hits = [
+            k for k in pattern["keywords"]
+            if k.lower() in brief_lower or k.lower() in terms or any(term in k.lower() for term in terms)
+        ]
         searchable = " ".join([pattern["id"], pattern["title"], pattern["summary"], *pattern["subjects"], *pattern["keywords"]]).lower()
         term_hits = [term for term in terms if term in searchable]
         text_score = len(keyword_hits) * 5 + len(term_hits) * 2
@@ -153,6 +186,7 @@ def search_patterns(
             "subjects": pattern["subjects"], "frameworks": pattern["frameworks"],
             "match": hits[:8], "score": score,
             "source_credits": source_credits(pattern, source_items),
+            "use_policy": USE_POLICY,
         })
     return results
 
@@ -174,6 +208,8 @@ def route_source(data_root: Path, item_id: str, source_items: list[dict[str, Any
         "provider": {
             "transport": route["provider_transport"], "endpoint": route["provider_endpoint"],
             "requires": route["requires"], "cost": route["provider_tier"],
+            "auth": item.get("provider_auth") or "none",
+            "limit": item.get("provider_limit") or "none",
             "connection": "user-direct; Ailyre does not proxy or supply provider credentials",
         } if "provider-direct" in modes else None,
         "source": {"url": route["source_url"], "license": route["source_license"], "verified_at": route["verified_at"]},

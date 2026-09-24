@@ -1,0 +1,115 @@
+{
+ "id": "role-based-design-brief",
+ "title": "Role-based design brief instead of a borrowed brand",
+ "summary": "Read a DESIGN.md for its roles, type ramp, component states and motion rules, then map those roles onto the user brand. Do not reproduce another company visual identity unless the user is explicitly working on that product.",
+ "subjects": [
+  "design-system",
+  "agent-guidance",
+  "mobile-ux"
+ ],
+ "frameworks": [
+  "agnostic"
+ ],
+ "keywords": [
+  "design.md",
+  "token roles",
+  "type ramp",
+  "component states",
+  "设计简报"
+ ],
+ "when_to_use": [
+  "The user wants an agent to follow a written design brief while building in their own stack."
+ ],
+ "avoid_when": [
+  "The brief is a reverse-engineered commercial brand and the user did not ask to recreate that product."
+ ],
+ "anatomy": [
+  {
+   "part": "theme roles",
+   "purpose": "Names canvas, accent and status colors by role."
+  },
+  {
+   "part": "type ramp",
+   "purpose": "Lists text roles and their relative sizes, not a copied font file."
+  },
+  {
+   "part": "component states",
+   "purpose": "Describes default, pressed, disabled and empty behavior."
+  },
+  {
+   "part": "motion and haptics",
+   "purpose": "Records duration and feedback roles without embedding vendor assets."
+  }
+ ],
+ "props_schema": {
+  "type": "object",
+  "properties": {
+   "roles": {
+    "type": "object"
+   },
+   "typeRamp": {
+    "type": "array",
+    "items": {
+     "type": "string"
+    }
+   },
+   "sourceProduct": {
+    "type": "string"
+   }
+  },
+  "required": [
+   "roles"
+  ]
+ },
+ "tokens": [
+  {
+   "name": "color.canvas",
+   "purpose": "The background role."
+  },
+  {
+   "name": "color.accent",
+   "purpose": "The interactive accent role."
+  },
+  {
+   "name": "type.title",
+   "purpose": "The largest text role in the ramp."
+  }
+ ],
+ "states": [
+  {
+   "name": "default",
+   "behavior": "Uses the mapped roles."
+  },
+  {
+   "name": "pressed",
+   "behavior": "Changes the control without relying on a copied bitmap."
+  },
+  {
+   "name": "disabled",
+   "behavior": "Stays readable and is not indicated by color alone."
+  }
+ ],
+ "responsive": [
+  "Define how the type ramp and spacing change between phone and a larger window."
+ ],
+ "accessibility": [
+  "Check contrast for the mapped colors, not for a screenshot of the reference product.",
+  "Keep haptic or motion feedback optional when the user reduces motion."
+ ],
+ "implementation_steps": [
+  "Extract roles, type steps, states and motion from the brief.",
+  "Replace reference colors with the user brand tokens unless the user is building that specific product.",
+  "Implement the components in the requested stack.",
+  "Do not copy trademarked logos, screenshots or font files from the reference."
+ ],
+ "source_refs": [
+  {
+   "item_id": "182",
+   "evidence_paths": [
+    "README.md"
+   ],
+   "license_scope": "MIT catalog text; individual briefs are third-party observations of commercial apps",
+   "credit": "Meliwat, awesome-ios-design-md"
+  }
+ ]
+}
