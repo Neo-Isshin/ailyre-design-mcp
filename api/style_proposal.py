@@ -257,6 +257,98 @@ def propose_styles(
     }
 
 
+# ---- 组合指引：跨维度（风格×模式×组件库×效果）自由组合时的顺序/冲突/许可规则 ----
+
+FAMILY_CLASH: dict[tuple[str, str], str] = {
+    ("高声量", "暗夜科技"): "高饱和撞色与深底霓虹会互相打架——选定一个作主氛围，另一个只取单点元素（如粗野按钮用在暗页）",
+    ("素雅纸感", "高声量"): "留白纸感与大声量气质相反；除非刻意做'克制版粗野'（黑描边但低饱和），不建议整页混用",
+    ("素雅纸感", "材质光泽"): "可以（拟物纸面很好看），但必须统一光源向量与色温，否则阴影方向不一致会露馅",
+    ("高声量", "材质光泽"): "全息/玻璃的精致感会被撞色压住；只建议在粗野页里做单张'箔面卡'点缀",
+}
+
+_LICENSE_NOTES: dict[str, str] = {
+    "MIT": "保留版权与许可声明即可",
+    "Apache-2.0": "保留 LICENSE 与 NOTICE 声明",
+    "CC0-1.0": "公有领域，无义务（仍建议署名）",
+    "MIT+Commons-Clause": "代码可自由使用，但不得将该库本身作为产品转售（Commons Clause 限制）",
+    "MIT+CommonsClause": "代码可自由使用，但不得将该库本身作为产品转售（Commons Clause 限制）",
+    "custom-non-redistribution": "可嵌入自己的应用，不得把组件集合原样再分发",
+    "AGPL-3.0": "网络服务场景有开源义务——coss ui 仅 apps/ui 部分为 MIT，引用前核对来源文件许可",
+    "unspecified": "许可未标注：使用前先到仓库核实",
+    "proprietary": "专有来源：只用自写摘要和原站链接，不复制实现或媒体",
+    "unknown": "许可未知：使用前先到仓库核实，不要当作可再分发",
+    "AGPL-3.0+MIT-subtrees": "仓库主体与子树许可不同，引用前核对具体文件",
+    "CC-BY-NC-4.0": "须署名，且不得用于商业用途",
+    "GPL-3.0": "衍生作品须按 GPL-3.0 提供对应源码",
+    "IPA-1.0": "字体许可：嵌入或再分发前核对 IPA 条款，不把字体文件当素材包再分发",
+    "ISC": "保留版权与许可声明即可",
+    "OFL-1.1": "字体可嵌入文档；不要把字体文件单独抽出再分发",
+    "PolyForm-Noncommercial-1.0.0": "仅限非商业使用",
+    "conflicting-CC-BY-vendor-terms": "许可声明互相冲突：默认不复制、不托管",
+    "mixed-oss-icons+proprietary-app": "图标与应用许可不同，只用已标明的开源部分",
+}
+
+
+def combine_guide(
+    style_tags: list[str],
+    framework: str | None = None,
+    item_ids: list[str] | None = None,
+    items: list[dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    tags = [t for t in style_tags if t in STYLE_PROFILES] or list(STYLE_PROFILES.keys())[:1]
+    families = list(dict.fromkeys(STYLE_PROFILES[t]["family"] for t in tags))
+    framework = framework or "未指定（默认单文件 HTML）"
+
+    clash_warnings = []
+    for i in range(len(families)):
+        for j in range(i + 1, len(families)):
+            key = (families[i], families[j])
+            note = FAMILY_CLASH.get(key) or FAMILY_CLASH.get((families[j], families[i]))
+            if note:
+                clash_warnings.append(f"{families[i]} × {families[j]}：{note}")
+
+    license_obligations = []
+    if item_ids and items is not None:
+        by_id = {i.get("id"): i for i in items}
+        seen = set()
+        for iid in item_ids:
+            lic = ((by_id.get(iid) or {}).get("license") or "unspecified").strip()
+            note = _LICENSE_NOTES.get(lic, _LICENSE_NOTES["unspecified"])
+            if lic not in seen:
+                seen.add(lic)
+                license_obligations.append(
+                    {"license": lic, "items": [iid], "obligation": note}
+                )
+            else:
+                next(o for o in license_obligations if o["license"] == lic)["items"].append(iid)
+
+    return {
+        "style_tags": tags,
+        "families": families,
+        "framework": framework,
+        "assembly_order": [
+            "① 设计契约先行：先用 pattern design-contract（或你的 DESIGN.md）定下 token 事实来源（色板/字阶/圆角/间距/阴影比例）",
+            "② tokens 落地：把契约变量写入 :root 命名空间（建议 --项目前缀-*），这是唯一事实来源",
+            "③ 组件引入：从组件库复制需要的组件，把它们的硬编码色值/圆角全部替换为你的 token 引用（shadcn 系组件天然吃 CSS 变量，直接映射即可）",
+            "④ 单效果叠加：effect 库（光束/光标/玻璃/数字滚动）按需引入，先写 prefers-reduced-motion 降级再加动效",
+            "⑤ 微交互打磨：用 098 类工艺规则审查（高频操作弱动效、低频操作可带惊喜），最后统一检查对比度",
+        ],
+        "token_rules": [
+            "唯一事实来源：tokens 只从一个基准取（设计契约或选定的 pattern），其余库的变量重命名并入你的命名空间，禁止两个库各自定义语义相同的变量（如两个 --accent）",
+            "每个维度只保留一套刻度：圆角/间距/阴影各一个体系；引入新库时先对齐刻度再改样式",
+            "改库不改构：'复制即拥有'的组件库遵守改样式不改 DOM 结构，升级时才能平滑 diff",
+        ],
+        "clash_warnings": clash_warnings or ["所选风格家族之间无明显冲突"],
+        "license_obligations": license_obligations
+        or [{"license": "-", "items": [], "obligation": "未指定条目；混用多个库时逐个核对其 license 字段并聚合义务"}],
+        "mixing_examples": [
+            "设计规范(DESIGN.md/002) + 组件库(071 电商) + 效果(060 过渡)：契约定 token → 组件换肤 → 状态过渡打磨 —— 典型安全组合",
+            "物理光照(001 token) + 电商组件：光源向量统一后，商品卡的阴影全部由 token 派生 —— 效果统一的关键是只允许 token 派生阴影",
+            "新粗野主义组件 + 暗色底：取粗野的描边/按压语法，色板换成暗色系 —— 见 clash 规则'只取单点元素'",
+        ],
+    }
+
+
 def _presentation_template(description: str, page_type: str | None, directions: list[dict[str, Any]]) -> str:
     sections = []
     for d in directions:

@@ -107,11 +107,14 @@ def build_mcp_server(include_local: bool = True) -> MCPServer:
             ):
                 continue
             filtered.append(catalog.catalog_item(i, local_access=include_local))
+        page = filtered[offset : offset + limit]
+        import surface_log
+        surface_log.record_surface(surface_log.ids_from_catalog({"items": page}), "list_catalog")
         payload = {
             "total": len(filtered),
             "limit": limit,
             "offset": offset,
-            "items": filtered[offset : offset + limit],
+            "items": page,
             "policy": catalog.POLICY,
             "next_step": "Call get_entry with an id; do not expect this MCP to call third parties",
         }
@@ -210,8 +213,7 @@ def build_mcp_server(include_local: bool = True) -> MCPServer:
     def propose_styles(description: str, page_type: str | None = None, count: int = 4, framework: str | None = None) -> str:
         import style_proposal
 
-        return _json(
-            style_proposal.propose_styles(
+        proposal = style_proposal.propose_styles(
                 description,
                 page_type=page_type,
                 count=count,
@@ -220,6 +222,18 @@ def build_mcp_server(include_local: bool = True) -> MCPServer:
                 routes=knowledge_api.load_routes(catalog.data_dir()),
                 data_root=catalog.data_dir(),
             )
+        import surface_log
+        surface_log.record_surface(surface_log.ids_from_proposal(proposal), "propose_styles", explore_ids=surface_log.explore_ids_from_proposal(proposal))
+        return _json(proposal)
+
+    @server.tool(description="组合指引：跨维度混用时的组装顺序、token 统一规则、风格家族冲突警告、许可义务聚合。style_tags/item_ids 传逗号分隔字符串。选定多个风格或要混用多个组件库/效果库时调用。")
+    def get_combination_guide(style_tags: str, framework: str | None = None, item_ids: str | None = None) -> str:
+        import style_proposal
+
+        tags = [t.strip() for t in style_tags.split(",") if t.strip()]
+        ids = [t.strip() for t in (item_ids or "").split(",") if t.strip()]
+        return _json(
+            style_proposal.combine_guide(tags, framework=framework, item_ids=ids, items=catalog.load_items())
         )
 
     @server.tool(description="列出可直接通过本 MCP 读取的开源文件及其许可证。只列逐文件审核的清单。")

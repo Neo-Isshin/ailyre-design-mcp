@@ -1166,7 +1166,7 @@ def route_design_brief(
             providers.append(route)
         elif len(references) < 4:
             references.append({"item_id": candidate["id"], "title": candidate["title"], "url": next(i["url"] for i in sources if i["id"] == candidate["id"])})
-    return {
+    payload = {
         "brief": brief,
         "framework": framework,
         "budget_stage": budget_stage,
@@ -1181,6 +1181,9 @@ def route_design_brief(
         "ask_when_account_batch_fails": _ask_paid(candidates_routes, sources),
         "next_step": ("" if framework else STACK_HINT) + _ladder_next_step(patterns, providers, paid_options),
     }
+    import surface_log
+    surface_log.record_surface(surface_log.ids_from_route(payload), "route")
+    return payload
 
 
 def safe_route_design_brief(
@@ -1311,11 +1314,14 @@ def catalog(
             continue
         filtered.append(catalog_item(i, local_access=not is_public_request(request)))
     total = len(filtered)
+    page = filtered[offset : offset + limit]
+    import surface_log
+    surface_log.record_surface(surface_log.ids_from_catalog({"items": page}), "list_catalog")
     return {
         "total": total,
         "limit": limit,
         "offset": offset,
-        "items": filtered[offset : offset + limit],
+        "items": page,
         "policy": POLICY,
         "next_step": "GET /v1/items/{id}/entry for how_to_use; do not ask this API to call third parties",
     }
@@ -1494,7 +1500,7 @@ def style_proposal_endpoint(
 ) -> dict[str, Any]:
     import style_proposal
 
-    return style_proposal.propose_styles(
+    proposal = style_proposal.propose_styles(
         description,
         page_type=page_type,
         count=count,
@@ -1503,6 +1509,9 @@ def style_proposal_endpoint(
         routes=knowledge_api.load_routes(data_dir()),
         data_root=data_dir(),
     )
+    import surface_log
+    surface_log.record_surface(surface_log.ids_from_proposal(proposal), "propose_styles", explore_ids=surface_log.explore_ids_from_proposal(proposal))
+    return proposal
 
 
 @app.get("/v1/style-proposal/template", response_class=PlainTextResponse)
@@ -1523,6 +1532,19 @@ def style_proposal_template_endpoint(
         data_root=data_dir(),
     )
     return style_proposal._presentation_template(proposal["description"], proposal["page_type"], proposal["directions"])
+
+
+@app.get("/v1/combine-guide")
+def combine_guide_endpoint(
+    style_tags: str = Query(..., description="逗号分隔的风格标签，如 极简克制,新粗野主义"),
+    framework: str | None = Query(default=None),
+    item_ids: str | None = Query(default=None, description="逗号分隔的条目 id，用于聚合许可义务"),
+) -> dict[str, Any]:
+    import style_proposal
+
+    tags = [t.strip() for t in style_tags.split(",") if t.strip()]
+    ids = [t.strip() for t in (item_ids or "").split(",") if t.strip()]
+    return style_proposal.combine_guide(tags, framework=framework, item_ids=ids, items=load_items())
 
 
 # ---- 公网 MCP（Streamable HTTP）----
