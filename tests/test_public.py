@@ -15,7 +15,7 @@ import knowledge_api  # noqa: E402
 def test_public_source_mirror_is_text_only_and_complete():
     with (ROOT / "index.csv").open(newline="", encoding="utf-8") as f:
         sources = list(csv.DictReader(f))
-    assert knowledge_api.validate_repository(ROOT, sources, check_evidence=False) == {"patterns": 17, "sources": 190}
+    assert knowledge_api.validate_repository(ROOT, sources, check_evidence=False) == {"patterns": 19, "sources": 190}
     assert app.open_source_manifest() == {}
     assert not (ROOT / "archive").exists()
     assert not (ROOT / "metadata").exists()

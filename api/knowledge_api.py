@@ -136,6 +136,48 @@ def expand_query_terms(brief_lower: str, terms: set[str]) -> set[str]:
     return expanded
 
 
+# Non-engineering briefs (a blog, a folded brochure) often share no keywords
+# with pattern ids. Fall back to the nearest style instead of an empty list.
+_AESTHETIC_HINTS: tuple[tuple[tuple[str, ...], str], ...] = (
+    (("博客", "blog", "折页", "brochure", "杂志", "editorial", "编辑", "排版"), "编辑风"),
+    (("落地页", "landing", "商店", "store", "shop", "电商", "商城"), "电商实感"),
+    (("极简", "minimal"), "极简克制"),
+    (("玻璃", "glass", "液态"), "玻璃拟态"),
+    (("拟物", "skeu"), "拟物质感"),
+    (("游戏", "hud", "科幻"), "游戏UI科幻HUD"),
+    (("暗色", "dark"), "暗色友好"),
+    (("渐变", "gradient"), "渐变高饱和"),
+)
+_STYLE_SUBJECTS = {
+    "编辑风": {"editorial", "documentation", "site-inspiration"},
+    "电商实感": {"commerce", "components"},
+    "极简克制": {"design-system", "agent-guidance"},
+    "玻璃拟态": {"visual-effects", "design-system"},
+    "拟物质感": {"visual-effects", "components"},
+    "游戏UI科幻HUD": {"game-ui"},
+    "暗色友好": {"dashboard", "design-system"},
+    "渐变高饱和": {"visual-effects"},
+}
+
+
+def aesthetic_fallback(brief_lower: str, patterns: list[dict], framework: str | None) -> list[tuple]:
+    styles = [tag for words, tag in _AESTHETIC_HINTS if any(word in brief_lower for word in words)]
+    if not styles:
+        return []
+    wanted = set().union(*(_STYLE_SUBJECTS.get(tag, set()) for tag in styles))
+    ranked = []
+    for pattern in patterns:
+        frameworks = set(pattern["frameworks"])
+        compatible = not framework or "agnostic" in frameworks or framework in frameworks or framework == "nextjs" and "react" in frameworks
+        if not compatible:
+            continue
+        overlap = wanted & set(pattern["subjects"])
+        if not overlap:
+            continue
+        ranked.append((3, pattern["id"], pattern, [f"风格:{styles[0]}", *sorted(overlap)]))
+    return ranked
+
+
 def get_pattern(data_root: Path, pattern_id: str, source_items: list[dict[str, Any]]) -> dict[str, Any]:
     pattern = load_patterns(data_root).get(pattern_id)
     if pattern is None:
@@ -178,16 +220,21 @@ def search_patterns(
             score += 2
         if score:
             ranked.append((score, pattern["id"], pattern, sorted(set(keyword_hits + term_hits))))
+    if not ranked and not subject:
+        ranked = aesthetic_fallback(brief_lower, list(load_patterns(data_root).values()), framework)
     ranked.sort(key=lambda row: (-row[0], row[1]))
     results = []
     for score, _, pattern, hits in ranked[: max(1, min(limit, 20))]:
-        results.append({
+        row = {
             "id": pattern["id"], "title": pattern["title"], "summary": pattern["summary"],
             "subjects": pattern["subjects"], "frameworks": pattern["frameworks"],
             "match": hits[:8], "score": score,
             "source_credits": source_credits(pattern, source_items),
             "use_policy": USE_POLICY,
-        })
+        }
+        if any(str(hit).startswith("风格:") for hit in hits):
+            row["fallback"] = "aesthetic"
+        results.append(row)
     return results
 
 

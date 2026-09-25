@@ -1,0 +1,67 @@
+{
+  "id": "playful-shape-budget",
+  "title": "Playful shape and color budget",
+  "summary": "Keep a cute interface recognizable by limiting the silhouette to a few large rounded forms and two semantic colors, so playfulness stays a system instead of scattered decoration.",
+  "subjects": ["visual-effects", "agent-guidance"],
+  "frameworks": ["agnostic", "vanilla"],
+  "keywords": ["playful", "cute", "rounded", "俏皮可爱", "圆角", "糖果色"],
+  "when_to_use": [
+    "The page should feel friendly or young, and the user asked for something cute rather than corporate."
+  ],
+  "avoid_when": [
+    "The audience needs a formal or luxury tone, or the page is mostly long-form reading."
+  ],
+  "anatomy": [
+    {
+      "part": "silhouette",
+      "purpose": "One dominant rounded outline built from a handful of large shapes."
+    },
+    {
+      "part": "color pair",
+      "purpose": "Two semantic colors for the subject, plus one background, reused instead of adding new hues."
+    },
+    {
+      "part": "motion",
+      "purpose": "A short bounce or squash on the primary action, not continuous decoration."
+    }
+  ],
+  "props_schema": {
+    "type": "object",
+    "properties": {
+      "radius": {"type": "string"},
+      "subjectColors": {"type": "array", "maxItems": 2},
+      "background": {"type": "string"}
+    },
+    "required": ["radius", "subjectColors", "background"]
+  },
+  "tokens": [
+    {"name": "shape.radius", "purpose": "Large corner radius shared by cards and buttons.", "example": "1.25rem"},
+    {"name": "color.subject.1", "purpose": "Primary candy color."},
+    {"name": "color.subject.2", "purpose": "Second subject color. Do not introduce a third accent."}
+  ],
+  "states": [
+    {"name": "rest", "behavior": "Soft shadow, no extra stickers."},
+    {"name": "press", "behavior": "Slight squash, then release. One motion only."}
+  ],
+  "responsive": [
+    "The silhouette must still read at a small size; drop secondary decorations before shrinking the main shape."
+  ],
+  "accessibility": [
+    "Do not rely on cuteness or color alone to explain an action.",
+    "Honor reduced motion by keeping the press feedback as a color or position change."
+  ],
+  "implementation_steps": [
+    "Choose one rounded silhouette language and apply it to cards, buttons, and the mark.",
+    "Lock two subject colors and one background; reuse them for marks instead of adding hues.",
+    "Add a single press or hover motion on the primary action.",
+    "Write fresh components in the user stack. Do not copy character artwork or component source."
+  ],
+  "source_refs": [
+    {
+      "item_id": "006",
+      "evidence_paths": ["SKILL.md"],
+      "license_scope": "MIT skill text describing a simple cute shape and color budget",
+      "credit": "IP as Logo contributors"
+    }
+  ]
+}

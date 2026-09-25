@@ -4,7 +4,7 @@ item_id,catalog_status,knowledge_status,pattern_ids,route_modes,canonical_item_i
 003,active,included,bounded-interface-review; surface-intent-routing,self-pattern; source-link,,,,none,none,无;可选browser,Apache-2.0,https://github.com/pbakaus/impeccable,2026-09-18,An authored pattern with source attribution is in the knowledge repository.
 004,active,included,semantic-diagram-layout,self-pattern; source-link,,,,none,none,无,MIT,https://github.com/cathrynlavery/diagram-design,2026-09-18,An authored pattern with source attribution is in the knowledge repository.
 005,adjacent,out-of-scope,,source-link,,,,none,none,browser;可选python,AGPL-3.0,https://github.com/yan9651688/yituo-hub-studio,2026-09-18,Adjacent topic; not part of default front-end pattern search.
-006,active,candidate,,source-link,,,,none,none,image-model,MIT,https://github.com/s1dashu/ip-as-logo-skill,2026-09-18,Permissive source is available for text-only pattern extraction after review.
+006,active,included,playful-shape-budget,self-pattern; source-link,,,,none,none,image-model,MIT,https://github.com/s1dashu/ip-as-logo-skill,2026-09-18,An authored pattern with source attribution is in the knowledge repository.
 007,active,candidate,,source-link,,,,none,none,agent;可选image-model,MIT,https://github.com/oil-oil/beautify-github-readme,2026-09-18,Permissive source is available for text-only pattern extraction after review.
 008,adjacent,out-of-scope,,source-link,,,,none,none,无;可选bun,MIT,https://github.com/anomalyco/models.dev,2026-09-18,Adjacent topic; not part of default front-end pattern search.
 009,adjacent,out-of-scope,,source-link,,,,none,none,python;可选cookie,MIT,https://github.com/Panniantong/Agent-Reach,2026-09-18,Adjacent topic; not part of default front-end pattern search.
@@ -114,7 +114,7 @@ item_id,catalog_status,knowledge_status,pattern_ids,route_modes,canonical_item_i
 113,active,reference-only,,source-link,,,,none,none,browser,proprietary,https://builtbydesigners.com/,2026-09-22,Proprietary source remains an authored summary and source link.
 114,active,rights-review,,source-link,,,,none,none,node,unknown,https://www.oxygenui.xyz,2026-09-22,License scope or permission needs case-by-case review before ingestion.
 115,active,candidate,,source-link,,,,none,none,node,MIT,https://ariseui.vercel.app,2026-09-22,Permissive source is available for text-only pattern extraction after review.
-116,active,candidate,,source-link,,,,none,none,node,MIT,https://toggles.dev,2026-09-22,Permissive source is available for text-only pattern extraction after review.
+116,active,included,dark-surface-accent,self-pattern; source-link,,,,none,none,node,MIT,https://toggles.dev,2026-09-22,An authored pattern with source attribution is in the knowledge repository.
 117,active,reference-only,,provider-direct; source-link,,streamable-http,https://shoogle.dev/mcp,needs-live-recheck,free,browser;node,proprietary,https://shoogle.dev,2026-09-22,Proprietary source remains an authored summary and source link. Provider endpoint needs current setup/terms verification.
 118,active,reference-only,,source-link,,,,none,none,browser;paywall,proprietary,https://wedoflow.com,2026-09-22,Proprietary source remains an authored summary and source link.
 119,adjacent,out-of-scope,,source-link,,,,none,none,browser;login,proprietary,https://closeit.fast,2026-09-22,Adjacent topic; not part of default front-end pattern search.

@@ -1,0 +1,67 @@
+{
+  "id": "dark-surface-accent",
+  "title": "Dark surface with one luminous accent",
+  "summary": "Build a dark interface from a near-black surface and one accent that still reads in a single color, so light and dark states stay recognizable without a second palette.",
+  "subjects": ["visual-effects", "design-system"],
+  "frameworks": ["agnostic", "vanilla"],
+  "keywords": ["dark", "accent", "theme", "暗色友好", "深色", "霓虹"],
+  "when_to_use": [
+    "The user wants a developer-facing or technical page that stays comfortable in a dark theme."
+  ],
+  "avoid_when": [
+    "The primary audience needs a light, high-familiarity consumer layout, or body text would sit on a glowing gradient."
+  ],
+  "anatomy": [
+    {
+      "part": "surface",
+      "purpose": "Near-black background and a slightly lifted panel, not a pure black void."
+    },
+    {
+      "part": "accent",
+      "purpose": "One luminous color for the active state, link, and focus ring."
+    },
+    {
+      "part": "state pair",
+      "purpose": "Light and dark treatments of the same silhouette, both legible before any animation."
+    }
+  ],
+  "props_schema": {
+    "type": "object",
+    "properties": {
+      "surface": {"type": "string"},
+      "accent": {"type": "string"},
+      "theme": {"type": "string", "enum": ["dark", "light"]}
+    },
+    "required": ["surface", "accent"]
+  },
+  "tokens": [
+    {"name": "surface.base", "purpose": "Page background.", "example": "#0c0c0c"},
+    {"name": "surface.raised", "purpose": "Panel one step above the page."},
+    {"name": "accent.primary", "purpose": "Single highlight used for focus, links, and the active control."}
+  ],
+  "states": [
+    {"name": "dark", "behavior": "Light text on the dark surface; accent marks the current item."},
+    {"name": "light", "behavior": "Same silhouette with inverted ink, still one accent."}
+  ],
+  "responsive": [
+    "Keep the accent on the control itself at narrow widths; do not move meaning into a glow that gets cropped."
+  ],
+  "accessibility": [
+    "Body text uses a solid surface, not the accent glow.",
+    "The control silhouette must stay understandable in one color, including when the accent is absent."
+  ],
+  "implementation_steps": [
+    "Set a near-black surface and one raised panel tone.",
+    "Assign a single accent to focus, links, and the selected state.",
+    "Define the light counterpart by inverting ink, not by inventing a second accent.",
+    "Implement the theme in the user stack. Do not copy toggle artwork or a component registry."
+  ],
+  "source_refs": [
+    {
+      "item_id": "116",
+      "evidence_paths": ["design.md"],
+      "license_scope": "MIT design note on light and dark silhouettes that read in one color",
+      "credit": "Toggles.dev contributors"
+    }
+  ]
+}

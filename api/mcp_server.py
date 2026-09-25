@@ -23,7 +23,7 @@ import app as catalog
 import knowledge_api
 
 INSTRUCTIONS = """Ailyre 设计知识 MCP：优先查询自有设计模式，让 Agent 按用户技术栈写新代码。先调用 get_usage_guide。
-自然语言需求先用 route_design_request 或 find_patterns，再用 get_pattern 获取结构、Props Schema、Tokens、状态与来源。
+用户对风格描述模糊（如'温暖一点、专业但别死板'）或想比较多版时，先 propose_styles 取 3-5 个差异化方向与对照页模板，与用户确认方向后再 route_design_request 或 find_patterns，用 get_pattern 获取结构、Props Schema、Tokens、状态与来源。
 原资源目录 recommend_design/get_entry 保持兼容；只有自有模式不足时再使用。
 对 public_source_files 中列出的开源文件可直接调用 get_open_source_file；将返回的来源、许可证和 NOTICE 随使用结果告知用户。
 用户不满意时先修正设计方向，并传 exclude_ids 避免重复；多轮仍不满意可扩展到 free-tier。
@@ -122,6 +122,7 @@ def build_mcp_server(include_local: bool = True) -> MCPServer:
         brief: str,
         limit: int = 8,
         budget_stage: str = "free",
+        framework: str | None = None,
         resource_role: str | None = None,
         design_subject: str | None = None,
         exclude_ids: str | None = None,
@@ -133,10 +134,12 @@ def build_mcp_server(include_local: bool = True) -> MCPServer:
         brief = brief.strip()
         if len(brief) < 2:
             raise ValueError("brief must contain at least 2 characters")
+        framework_value = catalog.resolve_framework(framework, brief)
         items = catalog.recommend_design_items(
             brief,
             limit=max(1, min(int(limit), 20)),
             budget_stage=budget_stage,
+            framework=framework_value,
             resource_role=resource_role,
             design_subject=design_subject,
             exclude_ids=exclude_ids,
@@ -157,7 +160,8 @@ def build_mcp_server(include_local: bool = True) -> MCPServer:
                 "self_patterns": patterns,
                 "items": items,
                 "next_stage": "free-tier" if budget_stage == "free" else "paid-with-user-consent" if budget_stage == "free-tier" else None,
-                "next_step": (
+                "framework": framework_value,
+                "next_step": ("" if framework_value else catalog.STACK_HINT) + (
                     "Call get_pattern and implement fresh code in the user's stack. Catalog items are sources, not the implementation."
                     if patterns else
                     "Call get_entry for 1-3 candidates before installing, executing, or contacting a provider"
@@ -171,7 +175,14 @@ def build_mcp_server(include_local: bool = True) -> MCPServer:
 
     @server.tool(description="读取分类词表和 Agent 调用策略：免费、free tier、用户同意后探索付费。")
     def get_usage_guide() -> str:
-        return _json({"guide": catalog.AGENT_GUIDE_MD, "taxonomy": catalog.TAXONOMY})
+        return _json({
+            "guide": catalog.AGENT_GUIDE_MD,
+            "taxonomy": catalog.TAXONOMY,
+            "next_step": [
+                catalog.STACK_HINT,
+                "然后调用 route_design_request 或 find_patterns，再用 get_pattern 按该技术栈写新代码。",
+            ],
+        })
 
     @server.tool(description="按用户 brief、技术栈和设计主题检索我们编写的模式。返回结构化摘要和逐项来源署名。")
     def find_patterns(brief: str, framework: str | None = None, subject: str | None = None, limit: int = 5) -> str:
@@ -193,7 +204,23 @@ def build_mcp_server(include_local: bool = True) -> MCPServer:
 
     @server.tool(description="根据 brief 优先路由到自有模式，另外列出用户可自行授权的官方提供方和原站参考。默认只推荐免费。")
     def route_design_request(brief: str, framework: str | None = None, budget_stage: str = "free", limit: int = 5) -> str:
-        return _json(catalog.route_design_brief(brief, framework=framework, budget_stage=budget_stage, limit=limit))
+        return _json(catalog.safe_route_design_brief(brief, framework=framework, budget_stage=budget_stage, limit=limit))
+
+    @server.tool(description="风格提案：用户对风格的描述模糊时（如'温暖一点、专业但别死板'）或想比较多版，返回 3-5 个彼此可区分的风格方向——每个含感受描述/配色/字体/布局建议/可落码 pattern/参考条目，并自带多版本统一呈现的对照页模板（version-a/b/c + index.html）。用户已明确指定单一风格时不要调用。")
+    def propose_styles(description: str, page_type: str | None = None, count: int = 4, framework: str | None = None) -> str:
+        import style_proposal
+
+        return _json(
+            style_proposal.propose_styles(
+                description,
+                page_type=page_type,
+                count=count,
+                framework=framework,
+                items=catalog.load_items(),
+                routes=knowledge_api.load_routes(catalog.data_dir()),
+                data_root=catalog.data_dir(),
+            )
+        )
 
     @server.tool(description="列出可直接通过本 MCP 读取的开源文件及其许可证。只列逐文件审核的清单。")
     def list_open_source_files(item_id: str | None = None) -> str:

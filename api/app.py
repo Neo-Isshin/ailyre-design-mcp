@@ -26,7 +26,7 @@ from fastapi.responses import JSONResponse, PlainTextResponse
 
 import knowledge_api
 
-VERSION = "0.9.1"
+VERSION = "0.9.2"
 DEFAULT_DATA = Path(__file__).resolve().parent.parent
 POLICY = (
     "公网优先提供自有设计模式、结构契约和逐项来源署名。"
@@ -100,11 +100,19 @@ GRANULARITY_VOCAB: dict[str, str] = {
 }
 
 
+_GRANULARITY_ALIAS: dict[str, str] = {}
+for _gkey, _glabel in GRANULARITY_VOCAB.items():
+    _GRANULARITY_ALIAS[_gkey] = _gkey
+    _GRANULARITY_ALIAS[_glabel.strip().lower()] = _gkey
+    _GRANULARITY_ALIAS[_glabel.split("·")[0].strip().lower()] = _gkey
+
+
 def resolve_granularity(raw: str | None) -> str | None:
+    """Normalize granularity. Accepts the English key or the Chinese label."""
     if not raw or not raw.strip():
         return None
     key = raw.strip().lower()
-    return key if key in GRANULARITY_VOCAB else raw.strip()
+    return _GRANULARITY_ALIAS.get(key, raw.strip())
 
 
 def resolve_style(raw: str | None) -> str | None:
@@ -870,7 +878,8 @@ def catalog_item(item: dict[str, Any], *, local_access: bool = True) -> dict[str
 
 _INTENT_EXPANSIONS: tuple[tuple[tuple[str, ...], tuple[str, ...]], ...] = (
     (("dashboard", "后台", "管理台", "数据台"), ("dashboard", "商务克制", "components", "b2b")),
-    (("landing", "落地页", "官网", "营销页"), ("landing-page", "hero", "site-inspiration")),
+    (("landing", "落地页", "官网", "营销页"), ("landing-page", "hero", "site-inspiration", "components")),
+    (("store", "shop", "商店", "店铺"), ("commerce", "components", "电商实感")),
     (("ecommerce", "电商", "商城", "购物"), ("commerce", "电商实感", "components")),
     (("game", "游戏", "hud", "科幻"), ("game-ui", "hud")),
     (("motion", "动效", "动画", "交互"), ("motion", "microinteraction", "动效密集")),
@@ -884,11 +893,57 @@ _INTENT_EXPANSIONS: tuple[tuple[tuple[str, ...], tuple[str, ...]], ...] = (
 BUDGET_STAGES = {"free": {"free"}, "free-tier": {"free", "free-tier"}, "paid": {"free", "free-tier", "paid"}}
 
 
+_FRAMEWORK_PARAM = re.compile(r"framework\s*=\s*([a-z0-9][a-z0-9.+-]*)", re.IGNORECASE)
+_STACK_TOKENS = {
+    "vanilla-html": "vanilla-html", "vanilla": "vanilla-html", "html": "vanilla-html",
+    "react": "react", "nextjs": "nextjs", "next.js": "nextjs", "vue": "vue", "svelte": "svelte",
+}
+_FRAMEWORK_CONFLICTS = {
+    "vanilla-html": {"react", "vue", "svelte", "nextjs", "next", "angular"},
+    "react": {"vue", "svelte", "angular"},
+    "nextjs": {"vue", "svelte", "angular"},
+    "vue": {"react", "nextjs", "next", "svelte", "angular"},
+    "svelte": {"react", "vue", "nextjs", "next", "angular"},
+}
+STACK_HINT = "brief 里写明技术栈（如 framework=vanilla-html / react），推荐将按此过滤。"
+
+
+def resolve_framework(explicit: str | None, brief: str = "") -> str | None:
+    raw = (explicit or "").strip().lower()
+    if not raw:
+        found = _FRAMEWORK_PARAM.search(brief or "")
+        raw = found.group(1).lower() if found else ""
+    if not raw:
+        return None
+    return _STACK_TOKENS.get(raw, raw)
+
+
+def _compat_tokens(item: dict[str, Any]) -> set[str]:
+    return {part.strip().lower() for part in re.split(r"[;；,\s]+", item.get("compat") or "") if part.strip()}
+
+
+def _framework_allows(item: dict[str, Any], framework: str | None) -> bool:
+    if not framework:
+        return True
+    blocked = _FRAMEWORK_CONFLICTS.get(framework)
+    if not blocked:
+        return True
+    tokens = _compat_tokens(item)
+    if framework in {"react", "nextjs"} and "react" in tokens:
+        return True
+    if framework == "vue" and "vue" in tokens:
+        return True
+    if framework == "svelte" and "svelte" in tokens:
+        return True
+    return not bool(tokens & blocked)
+
+
 def recommend_design_items(
     brief: str,
     *,
     limit: int = 8,
     budget_stage: str = "free",
+    framework: str | None = None,
     resource_role: str | None = None,
     design_subject: str | None = None,
     exclude_ids: str | None = None,
@@ -904,7 +959,8 @@ def recommend_design_items(
     allowed_costs = BUDGET_STAGES["free"] if free_only else BUDGET_STAGES[budget_stage]
     excluded = set(re.split(r"[,;\s]+", exclude_ids or "")) - {""}
     brief_lower = brief.lower().strip()
-    terms = {t for t in re.split(r"[^\w\u4e00-\u9fff.+-]+", brief_lower) if len(t) >= 2}
+    framework = resolve_framework(framework, brief)
+    terms = {t for t in re.split(r"[^\w\u4e00-\u9fff.]+", brief_lower) if len(t) >= 2}
     for triggers, expansions in _INTENT_EXPANSIONS:
         if any(trigger in brief_lower for trigger in triggers):
             terms.update(expansions)
@@ -926,6 +982,8 @@ def recommend_design_items(
         if local_only and not item.get("has_archive"):
             continue
         if no_auth and external["auth_required"]:
+            continue
+        if not _framework_allows(item, framework):
             continue
         searchable = " ".join(
             [
@@ -958,6 +1016,11 @@ def recommend_design_items(
             score += 3
         if budget_stage == "paid" and item.get("access_cost") == "paid":
             score += 5
+        if matched and item.get("granularity") == "component" and any(
+            trigger in brief_lower
+            for trigger in ("landing", "落地页", "官网", "营销页", "store", "shop", "商店", "店铺", "电商", "商城")
+        ):
+            score += 12
         if not matched and brief_lower:
             continue
         ranked.append((score, item_id, item, matched))
@@ -1058,8 +1121,9 @@ def route_design_brief(
         raise ValueError("invalid budget stage")
     sources = load_items()
     root = data_dir()
+    framework = resolve_framework(framework, brief)
     patterns = knowledge_api.search_patterns(root, brief, sources, framework=framework, limit=limit)
-    candidates = recommend_design_items(brief, budget_stage=budget_stage, limit=20, local_access=False)
+    candidates = recommend_design_items(brief, budget_stage=budget_stage, framework=framework, limit=20, local_access=False)
     brief_lower = brief.lower()
     requested_subjects: set[str] = set()
     for triggers, subjects in (
@@ -1076,7 +1140,14 @@ def route_design_brief(
     paid_options: list[dict[str, Any]] = []
     candidates_routes: list[dict[str, Any]] = []
     for candidate in candidates:
-        route = knowledge_api.route_source(root, candidate["id"], sources)
+        try:
+            route = knowledge_api.route_source(root, candidate["id"], sources)
+        except (KeyError, StopIteration):
+            continue
+        if "route_modes" not in route:
+            route = route.get("route") if isinstance(route.get("route"), dict) else None
+        if not isinstance(route, dict) or "route_modes" not in route:
+            continue
         candidates_routes.append(route)
         relevant_provider = not requested_subjects or bool(requested_subjects.intersection(candidate.get("design_subjects") or []))
         if (
@@ -1108,17 +1179,43 @@ def route_design_brief(
         "layer": "local-and-open",
         "ask_when_layer_exhausted": _ask_account(candidates_routes, sources),
         "ask_when_account_batch_fails": _ask_paid(candidates_routes, sources),
-        "next_step": _ladder_next_step(patterns, providers, paid_options),
+        "next_step": ("" if framework else STACK_HINT) + _ladder_next_step(patterns, providers, paid_options),
     }
 
 
-_GUIDE_BODY = """# Ailyre 设计知识 MCP Agent 调用指引（v0.9）
+def safe_route_design_brief(
+    brief: str,
+    *,
+    framework: str | None = None,
+    budget_stage: str = "free",
+    limit: int = 5,
+) -> dict[str, Any]:
+    """Route a brief, or return a structured fallback instead of an uncoded text error."""
+    try:
+        return route_design_brief(brief, framework=framework, budget_stage=budget_stage, limit=limit)
+    except Exception:
+        return {
+            "ok": False,
+            "error": {"code": "route_degraded", "message": "brief 未能完整路由"},
+            "brief": brief,
+            "framework": framework,
+            "budget_stage": budget_stage,
+            "self_patterns": [],
+            "optional_provider_routes": [],
+            "paid_provider_options": [],
+            "source_references": [],
+            "degraded": True,
+            "next_step": STACK_HINT + "然后重试 route_design_request，或改用 find_patterns / list_catalog。",
+        }
+
+
+_GUIDE_BODY = """# Ailyre 设计知识 MCP Agent 调用指引（v0.9.2）
 
 公网 MCP：`https://www.ailyre.com/api/mcp`。从 Ailyre 用户面板生成个人 Key，客户端请求带 `X-API-Key`。
 本站提供自有设计模式、结构与接口契约、来源署名、资源路由和逐文件审核的开源文本。第三方服务由用户使用自己的账号直接连接。
 
 ## 找资源
-1. 自然语言需求先调用 `route_design_request` 或 `find_patterns`，再用 `get_pattern` 获取结构、Props Schema、Tokens、状态和来源署名；用用户当前技术栈写新代码。
+1. brief 里写明技术栈（如 framework=vanilla-html / react），推荐将按此过滤。然后调用 `route_design_request` 或 `find_patterns`，再用 `get_pattern` 获取结构、Props Schema、Tokens、状态和来源署名；用该技术栈写新代码。
 2. `route_item` 解释某个来源是否有自有模式、官方提供方接口或原站链接。它只提供连接信息，不代调第三方 API/MCP。
 3. 若自有模式不足，再调用兼容旧客户端的 `recommend_design`；默认 `budget_stage=free`。
 4. 用 `resource_role`、`design_subjects`、`design_units`、`platforms`、`operating_systems`、`aesthetic` 与 `techniques` 精确筛选。`operating_systems` 只在资源绑定某个系统时填写，空着表示不限系统。`platforms` 含 `desktop`。旧 `style` 混合了这些概念，仅供兼容。
@@ -1237,12 +1334,15 @@ def recommend_design(
     free_only: bool = False,
     local_only: bool = False,
     no_auth: bool = False,
+    framework: str | None = None,
 ) -> dict[str, Any]:
     """Return a small, ranked set of resources for a natural-language brief."""
+    framework_value = resolve_framework(framework, brief)
     items = recommend_design_items(
         brief,
         limit=limit,
         budget_stage=budget_stage,
+        framework=framework_value,
         resource_role=resource_role,
         design_subject=design_subject,
         exclude_ids=exclude_ids,
@@ -1263,7 +1363,8 @@ def recommend_design(
         "budget_stage": budget_stage,
         "next_stage": "free-tier" if budget_stage == "free" else "paid-with-user-consent" if budget_stage == "free-tier" else None,
         "selection_note": "Heuristic shortlist only; inspect get_entry before installing, executing, or contacting a provider.",
-        "next_step": (
+        "framework": framework_value,
+        "next_step": ("" if framework_value else STACK_HINT) + (
             "Call get_pattern and implement fresh code in the user's stack. Do not call a provider yet."
             if patterns else
             "No pattern matched. Prefer provider_auth=none and provider_limit=none. Then explain rate-limited routes. Ask before provider_auth=account. Ask again before paid."
@@ -1380,6 +1481,48 @@ def view_by_purpose(
         "items": [catalog_item(i, local_access=False) for i in filtered[offset : offset + limit]] if is_public_request(request) else filtered[offset : offset + limit],
         "policy": POLICY,
     }
+
+
+
+# ---- 风格提案（style proposal）：模糊描述 → N 个差异化方向 + 统一呈现模板 ----
+@app.get("/v1/style-proposal")
+def style_proposal_endpoint(
+    description: str = Query(..., description="用户的风格描述，自然语言，可模糊"),
+    page_type: str | None = Query(default=None, description="storefront|blog|docs|event|brochure|landing|dashboard"),
+    count: int = Query(default=4, ge=2, le=5),
+    framework: str | None = Query(default=None),
+) -> dict[str, Any]:
+    import style_proposal
+
+    return style_proposal.propose_styles(
+        description,
+        page_type=page_type,
+        count=count,
+        framework=framework,
+        items=load_items(),
+        routes=knowledge_api.load_routes(data_dir()),
+        data_root=data_dir(),
+    )
+
+
+@app.get("/v1/style-proposal/template", response_class=PlainTextResponse)
+def style_proposal_template_endpoint(
+    description: str = Query(...),
+    page_type: str | None = Query(default=None),
+    count: int = Query(default=4, ge=2, le=5),
+) -> str:
+    import style_proposal
+
+    proposal = style_proposal.propose_styles(
+        description,
+        page_type=page_type,
+        count=count,
+        framework=None,
+        items=load_items(),
+        routes=knowledge_api.load_routes(data_dir()),
+        data_root=data_dir(),
+    )
+    return style_proposal._presentation_template(proposal["description"], proposal["page_type"], proposal["directions"])
 
 
 # ---- 公网 MCP（Streamable HTTP）----

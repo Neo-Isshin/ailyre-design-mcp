@@ -4,7 +4,7 @@
 
 ## 汇总
 
-- 自有仓判定：alias 2, candidate 56, included 13, included-scoped 1, needs-source-verification 2, out-of-scope 16, reference-only 78, rights-review 22
+- 自有仓判定：alias 2, candidate 54, included 15, included-scoped 1, needs-source-verification 2, out-of-scope 16, reference-only 78, rights-review 22
 - 提供方接口判定：needs-live-recheck 9, none 161, provider-documented 16, unofficial-not-routed 4
 - 自有模式在 `knowledge/patterns/`；来源登记在 `index.csv`。专有站点只提供自写摘要、事实分类和原站链接。
 
@@ -17,7 +17,7 @@
 | 003 | Impeccable | included | self-pattern; source-link | none | An authored pattern with source attribution is in the knowledge repository. |
 | 004 | Diagram Design | included | self-pattern; source-link | none | An authored pattern with source attribution is in the knowledge repository. |
 | 005 | YI TUO HUB STUDIO | out-of-scope | source-link | none | Adjacent topic; not part of default front-end pattern search. |
-| 006 | IP as Logo | candidate | source-link | none | Permissive source is available for text-only pattern extraction after review. |
+| 006 | IP as Logo | included | self-pattern; source-link | none | An authored pattern with source attribution is in the knowledge repository. |
 | 007 | Beautify GitHub README | candidate | source-link | none | Permissive source is available for text-only pattern extraction after review. |
 | 008 | models.dev | out-of-scope | source-link | none | Adjacent topic; not part of default front-end pattern search. |
 | 009 | Agent Reach | out-of-scope | source-link | none | Adjacent topic; not part of default front-end pattern search. |
@@ -127,7 +127,7 @@
 | 113 | Built by Designers | reference-only | source-link | none | Proprietary source remains an authored summary and source link. |
 | 114 | Oxygen UI | rights-review | source-link | none | License scope or permission needs case-by-case review before ingestion. |
 | 115 | Arise UI | candidate | source-link | none | Permissive source is available for text-only pattern extraction after review. |
-| 116 | Toggles.dev | candidate | source-link | none | Permissive source is available for text-only pattern extraction after review. |
+| 116 | Toggles.dev | included | self-pattern; source-link | none | An authored pattern with source attribution is in the knowledge repository. |
 | 117 | Shoogle | reference-only | provider-direct; source-link | needs-live-recheck | Proprietary source remains an authored summary and source link. Provider endpoint needs current setup/terms verification. |
 | 118 | Wedoflow | reference-only | source-link | none | Proprietary source remains an authored summary and source link. |
 | 119 | closeit.fast | out-of-scope | source-link | none | Adjacent topic; not part of default front-end pattern search. |
